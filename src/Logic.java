@@ -14,27 +14,29 @@ public class Logic {
         List<Board> levels = new ArrayList<>();
 
 ColoredSquare[] coloredSquares = {
-                new ColoredSquare(new Position(0, 1), " ■ ", ConsoleColors.GREEN),  // Green
-                new ColoredSquare(new Position(1, 2), " ■ ", ConsoleColors.YELLOW),  // Yellow
-                new ColoredSquare(new Position(1, 3), " ■ ", ConsoleColors.BLUE),    // Blue
-                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
-                new ColoredSquare(new Position(2, 1), " ■ ", ConsoleColors.BLUE),    // Blue
-                new ColoredSquare(new Position(2, 3), " ■ ", ConsoleColors.GREEN)    // Green
+                new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.YELLOW),  // Green
+                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Green
+                new ColoredSquare(new Position(0, 2), " ■ ", ConsoleColors.PURPLE),  // Yellow
+                new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE),  // Yellow
+//                new ColoredSquare(new Position(1, 3), " ■ ", ConsoleColors.BLUE),    // Blue
+//                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
+//                new ColoredSquare(new Position(2, 1), " ■ ", ConsoleColors.BLUE),    // Blue
+//                new ColoredSquare(new Position(2, 3), " ■ ", ConsoleColors.GREEN)    // Green
         };
 
         // Initialize walls with predefined positions
         Wall[] walls = {
-                new Wall(new Position(0, 0)),
-                new Wall(new Position(3, 3)),
-                new Wall(new Position(0, 3)),
-                new Wall(new Position(3, 0))
+//                new Wall(new Position(0, 0)),
+//                new Wall(new Position(3, 3)),
+//                new Wall(new Position(0, 3)),
+//                new Wall(new Position(3, 0))
         };
 //
-        Board board = new Board(4, 4, coloredSquares, walls);
+        Board board = new Board(3, 3, coloredSquares, walls);
 //        Board board = InitializeBoard();
         board.displayBoard();
-
-        Structure.applyMove(board,coloredSquares,Move.DOWN);
+        Structure.getAllPossibleMoves(board);
+        Structure.applyMove(board,coloredSquares,Move.UP);
 
 
 //
