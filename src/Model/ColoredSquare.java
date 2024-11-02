@@ -8,4 +8,9 @@ public class ColoredSquare extends Square{
         this.type = type;
         this.color = color;
     }
+
+    @Override
+    public SquareType getSquareType() {
+        return SquareType.COLORED;
+    }
 }

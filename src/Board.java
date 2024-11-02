@@ -5,9 +5,9 @@ import Model.Square;
 import Model.Wall;
 
 public class Board {
-    private final int boardX;
-    private final int boardY;
-    public Square[][] board;
+    public final int boardX;
+    public final int boardY;
+    public Square[][] squares;
     public ColoredSquare[] coloredSquares;
     public Wall[] walls;
 
@@ -19,33 +19,33 @@ public class Board {
         this.boardY = y;
         this.coloredSquares = coloredSquares;
         this.walls = walls;
-        this.board = new Square[x][y];
+        this.squares = new Square[x][y];
         prepareBoard();
     }
 
     private void prepareBoard() {
-        // Initialize board with empty squares
+        // Initialize  empty squares
         for (int i = 0; i < boardX; i++) {
             for (int j = 0; j < boardY; j++) {
-                board[i][j] = new EmptySquare(new Position(i, j));  // Initialize each square as empty
+                squares[i][j] = new EmptySquare(new Position(i, j));
             }
         }
 
-        // Place colored squares
+        //  colored squares
         for (ColoredSquare coloredSquare : coloredSquares) {
-            board[coloredSquare.position.x][coloredSquare.position.y] = coloredSquare;
+            squares[coloredSquare.position.x][coloredSquare.position.y] = coloredSquare;
         }
 
-        // Place walls
+        //  walls
         for (Wall wall : walls) {
-            board[wall.position.x][wall.position.y] = wall;
+            squares[wall.position.x][wall.position.y] = wall;
         }
     }
 
     public void displayBoard() {
         for (int i = 0; i < boardX; i++) {
             for (int j = 0; j < boardY; j++) {
-                Square square = board[i][j];
+                Square square = squares[i][j];
                 if (square instanceof ColoredSquare) {
                     System.out.print(((ColoredSquare) square).color + square.type + RESET + " ");
                 } else {

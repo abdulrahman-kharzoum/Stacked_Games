@@ -33,6 +33,9 @@ ColoredSquare[] coloredSquares = {
         Board board = new Board(4, 4, coloredSquares, walls);
 //        Board board = InitializeBoard();
         board.displayBoard();
+//        Structure.getAllPossibleMoves(board);
+        Structure.applyMove(board,coloredSquares,Move.DOWN);
+
 
 //
 //        System.out.println( Structure.canMove(levels.getFirst(),Move.UP));
