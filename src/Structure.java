@@ -34,8 +34,9 @@ public class Structure {
         return false;
     }
 
-    public static void applyMove(Board board, ColoredSquare[] coloredSquares, Move move) {
+    public static void applyMove(Board board, Move move) {
         boolean moved;
+        List<ColoredSquare> coloredSquares = new ArrayList<>(board.coloredSquares);
 
         do {
             moved = false;
@@ -45,37 +46,55 @@ public class Structure {
                     moved = true;
                 }
             }
+
+            // Check if the game is finished after each iteration
+            if (checkGameFinished(board)) {
+                System.out.println("Game Finished");
+                System.exit(0); // Exit the application
+            }
+
             print(board);
         } while (moved);
     }
+
+    public static boolean checkGameFinished(Board board) {
+        return board.coloredSquares.size() == board.numOfColors;
+    }
+
 
     public static void applyMoveOneSquare(Board board, ColoredSquare coloredSquare, Move move) {
         Position current = coloredSquare.position;
         Position next = getNextPosition(current, move);
 
+        List<ColoredSquare> squaresToRemove = new ArrayList<>();
+
         while (!isOutOfBounds(next, board)) {
             Square targetSquare = board.squares[next.x][next.y];
 
             if (targetSquare.getSquareType() == SquareType.WALL) {
-                break; // Stop if wall is reached
+                break;
             } else if (targetSquare.getSquareType() == SquareType.COLORED) {
                 ColoredSquare targetColoredSquare = (ColoredSquare) targetSquare;
 
                 if (!targetColoredSquare.color.equals(coloredSquare.color) && !canMove(board, targetColoredSquare, move)) {
-                    break; // Blocked by different color square that can't move
+                    break;
+                }
+                if (targetColoredSquare.color.equals(coloredSquare.color)) {
+                    squaresToRemove.add(targetColoredSquare);
                 }
             }
 
-            // Update board to reflect new position
             board.squares[current.x][current.y] = new EmptySquare(current);
             board.squares[next.x][next.y] = coloredSquare;
             coloredSquare.position = next;
 
-            // Advance to the next position
             current = next;
             next = getNextPosition(current, move);
         }
+
+        board.coloredSquares.removeAll(squaresToRemove);
     }
+
 
     public static void getAllPossibleMoves(Board board) {
         for (ColoredSquare coloredSquare : board.coloredSquares) {

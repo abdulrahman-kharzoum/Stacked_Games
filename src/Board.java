@@ -4,23 +4,27 @@ import Model.Position;
 import Model.Square;
 import Model.Wall;
 
+import java.util.List;
+
 public class Board {
     public final int boardX;
     public final int boardY;
     public Square[][] squares;
-    public ColoredSquare[] coloredSquares;
+    public int numOfColors;
+    public List<ColoredSquare> coloredSquares;
     public Wall[] walls;
 
     // ANSI Reset
     public static final String RESET = "\033[0m";
 
-    public Board(int x, int y, ColoredSquare[] coloredSquares, Wall[] walls) {
+    public Board(int x, int y, int numOfColors,List<ColoredSquare> coloredSquares, Wall[] walls) {
         this.boardX = x;
         this.boardY = y;
         this.coloredSquares = coloredSquares;
         this.walls = walls;
         this.squares = new Square[x][y];
-        prepareBoard();
+        this.numOfColors = numOfColors;
+         prepareBoard();
     }
 
     private void prepareBoard() {

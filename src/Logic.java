@@ -1,10 +1,6 @@
 import Model.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Logic {
     static Scanner scanner = new Scanner(System.in);
@@ -13,16 +9,13 @@ public class Logic {
 //        UserLevel();
         List<Board> levels = new ArrayList<>();
 
-ColoredSquare[] coloredSquares = {
-                new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.YELLOW),  // Green
-                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Green
-                new ColoredSquare(new Position(0, 2), " ■ ", ConsoleColors.PURPLE),  // Yellow
-                new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE),  // Yellow
-//                new ColoredSquare(new Position(1, 3), " ■ ", ConsoleColors.BLUE),    // Blue
-//                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
-//                new ColoredSquare(new Position(2, 1), " ■ ", ConsoleColors.BLUE),    // Blue
-//                new ColoredSquare(new Position(2, 3), " ■ ", ConsoleColors.GREEN)    // Green
-        };
+        List<ColoredSquare> coloredSquares = Arrays.asList(
+                new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
+                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
+                new ColoredSquare(new Position(0, 2), " ■ ", ConsoleColors.PURPLE),  // Purple
+                new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE)   // Purple
+        );
+
 
         // Initialize walls with predefined positions
         Wall[] walls = {
@@ -32,11 +25,11 @@ ColoredSquare[] coloredSquares = {
 //                new Wall(new Position(3, 0))
         };
 //
-        Board board = new Board(3, 3, coloredSquares, walls);
+        Board board = new Board(3, 3, 2,coloredSquares, walls);
 //        Board board = InitializeBoard();
         board.displayBoard();
         Structure.getAllPossibleMoves(board);
-        Structure.applyMove(board,coloredSquares,Move.UP);
+//        Structure.applyMove(board,Move.UP);
 
 
 //
@@ -73,11 +66,12 @@ public static Board InitializeBoard() {
     int boardY = scanner.nextInt();
 
     Set<String> occupiedPositions = new HashSet<>();
-
+    System.out.print("How many Colors Do You need?");
+    int numOfColors = scanner.nextInt();
     // Colored Squares
     System.out.print("Enter the number of colored squares: ");
     int numberOfColoredSquares = scanner.nextInt();
-    ColoredSquare[] coloredSquares = new ColoredSquare[numberOfColoredSquares];
+    List<ColoredSquare> coloredSquares = new ArrayList<ColoredSquare>();
 
 
     System.out.println("Choose a color for each colored square:");
@@ -95,7 +89,7 @@ public static Board InitializeBoard() {
                 int colorChoice = scanner.nextInt();
                 String color = getColorFromChoice(colorChoice);
 
-                coloredSquares[i] = new ColoredSquare(new Position(x, y), " ■ ", color);
+               coloredSquares.add(new ColoredSquare(new Position(x, y), " ■ ", color));
                 occupiedPositions.add(pos);
                 break;
             } else {
@@ -127,7 +121,7 @@ public static Board InitializeBoard() {
     }
 
 
-    return new Board(boardX, boardY, coloredSquares, walls);
+    return new Board(boardX, boardY, numOfColors,coloredSquares, walls);
 }
     private static boolean isValidPosition(int x, int y, int boardX, int boardY) {
         return x >= 0 && x < boardX && y >= 0 && y < boardY;
