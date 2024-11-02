@@ -15,46 +15,52 @@ public class Structure {
             Square targetSquare = board.squares[nextPosition.x][nextPosition.y];
 
             if (targetSquare.getSquareType() == SquareType.WALL) {
-                return foundAnEmptySquare; // Stop if wall encountered
+                return foundAnEmptySquare; // Stop if a wall is encountered
             } else if (targetSquare.getSquareType() == SquareType.EMPTY) {
-                foundAnEmptySquare = true; // Mark that there’s an empty space in the path
-                nextPosition = getNextPosition(nextPosition, move);
+                foundAnEmptySquare = true; // Mark that there's an empty space
+                nextPosition = getNextPosition(nextPosition, move); // Continue checking further
             } else if (targetSquare.getSquareType() == SquareType.COLORED) {
                 ColoredSquare targetColoredSquare = (ColoredSquare) targetSquare;
 
+                // If it's a differently-colored square
                 if (!targetColoredSquare.color.equals(coloredSquare.color)) {
-                    // Check if this differently-colored square can also move in the same direction
-                    if (!canMove(board, targetColoredSquare, move)) {
-                        return false; // If the other colored square can’t move, return false
+                    // Check if this square can also move in the same direction
+                    if (canMove(board, targetColoredSquare, move)) {
+                        foundAnEmptySquare = true; // Allow move if the blocking square can move
+                    } else {
+                        return false; // If the other square can't move, stop here
                     }
+                } else {
+                    // If it's the same-colored square, treat it as part of the movable group
+                    return true;
                 }
-                // Stop if it's a same-colored square (will only return true if found an empty space)
+                // If we reach here, return based on whether an empty space was found
                 return foundAnEmptySquare;
             }
         }
 
-        return foundAnEmptySquare;
+        return foundAnEmptySquare; // Return true if an empty path was found in the while loop
     }
 
     public static void applyMove(Board board, ColoredSquare[] coloredSquares, Move move) {
+        getAllPossibleMoves(board);
+
         boolean moved;
 
         do {
             moved = false;
 
             for (ColoredSquare coloredSquare : coloredSquares) {
-                // Re-check if the square can move based on the updated board state
                 if (canMove(board, coloredSquare, move)) {
                     applyMoveOneSquare(board, coloredSquare, move);
-                    moved = true; // Set flag to true if any square moves
+                    moved = true;
                 }
             }
 
-            // After each pass, update and print the possible moves for each square
-            print(board);
-            getAllPossibleMoves(board);
+        } while (moved);
 
-        } while (moved); // Continue until no more moves are possible
+        print(board);
+        
     }
 
     public static void applyMoveOneSquare(Board board, ColoredSquare coloredSquare, Move move) {
@@ -64,11 +70,23 @@ public class Structure {
         while (!isOutOfBounds(nextPos, board)) {
             Square targetSquare = board.squares[nextPos.x][nextPos.y];
 
-            // Stop if we reach a wall or differently-colored square
             if (targetSquare.getSquareType() == SquareType.WALL ||
-                    (targetSquare.getSquareType() == SquareType.COLORED &&
-                            !((ColoredSquare) targetSquare).color.equals(coloredSquare.color))) {
-                break;
+                    targetSquare.getSquareType() == SquareType.COLORED) {
+                ColoredSquare targetColoredSquare = (ColoredSquare) targetSquare;
+
+                if (!targetColoredSquare.color.equals(coloredSquare.color)) {
+                    // Check if the other square can move in the same direction
+                    if (canMove(board, targetColoredSquare, move)) {
+                        // Move the other square out of the way
+                        applyMoveOneSquare(board, targetColoredSquare, move);
+                    } else {
+                        // If the other square can't move, stop the current square's movement
+                        break;
+                    }
+                }
+                else {
+                    applyMoveOneSquare(board, targetColoredSquare, move);
+                }
             }
 
             // Update the board by moving the colored square to the next position
@@ -80,7 +98,11 @@ public class Structure {
             currentPos = nextPos;
             nextPos = getNextPosition(currentPos, move);
         }
+
+
+
     }
+
 
     public static void getAllPossibleMoves(Board board) {
         for (ColoredSquare coloredSquare : board.coloredSquares) {
