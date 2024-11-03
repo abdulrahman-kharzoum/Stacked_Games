@@ -13,9 +13,11 @@ public class Main extends JPanel implements KeyListener {
     public Main() {
         initialColoredSquares = new ArrayList<>();
         initialColoredSquares.add(new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.YELLOW));
-        initialColoredSquares.add(new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW));
-        initialColoredSquares.add(new ColoredSquare(new Position(0, 2), " ■ ", ConsoleColors.PURPLE));
-        initialColoredSquares.add(new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 1), " ■ ", ConsoleColors.YELLOW));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 0), " ■ ", ConsoleColors.YELLOW));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 2), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 1), " ■ ", ConsoleColors.GREEN));
 
         resetBoard();
 
@@ -35,7 +37,7 @@ public class Main extends JPanel implements KeyListener {
         for (ColoredSquare square : initialColoredSquares) {
             newSquares.add(new ColoredSquare(new Position(square.position.x, square.position.y), square.type, square.color));
         }
-        board = new Board(3, 3, 2, newSquares, new Wall[]{});
+        board = new Board(3, 3, 2, newSquares, new Wall[]{new Wall(new Position(1,1))});
         repaint();
     }
 

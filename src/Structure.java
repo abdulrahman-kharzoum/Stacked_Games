@@ -25,6 +25,8 @@ public class Structure {
                 if (!targetColoredSquare.color.equals(coloredSquare.color)) {
                     // different -color =>  can't move
                     return false;
+                }else {
+                    return true;
                 }
             }
 
@@ -47,13 +49,14 @@ public class Structure {
                 }
             }
 
-            // Check if the game is finished after each iteration
+            // Check if the game is finished
             if (checkGameFinished(board)) {
                 System.out.println("Game Finished");
-                System.exit(0); // Exit the application
+                System.exit(0); // Exit
             }
 
             print(board);
+            System.out.println();
         } while (moved);
     }
 
