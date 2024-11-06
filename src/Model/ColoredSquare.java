@@ -4,11 +4,12 @@ import java.awt.*;
 
 public class ColoredSquare extends Square{
     public String color;
-
+    public int colorCode;
     public ColoredSquare(Position position, String type, String color) {
         this.position = position;
         this.type = type;
         this.color = color;
+        this.colorCode = getColorCode();
     }
 
     @Override
@@ -19,27 +20,31 @@ public class ColoredSquare extends Square{
     public Color getColor() {
         return convertToColor(color);
     }
+    public int getColorCode() {
+        return switch (color) {
+            case ConsoleColors.RED -> 1;
+            case ConsoleColors.GREEN -> 2;
+            case ConsoleColors.YELLOW -> 3;
+            case ConsoleColors.BLUE -> 4;
+            case ConsoleColors.PURPLE -> 5;
+            case ConsoleColors.CYAN -> 6;
+            case ConsoleColors.WHITE -> 7;
+            default -> 8;
+        };
+
+    }
 
     private Color convertToColor(String ansiColor) {
-        switch (ansiColor) {
-            case ConsoleColors.RED:
-                return Color.RED;
-            case ConsoleColors.GREEN:
-                return Color.GREEN;
-            case ConsoleColors.YELLOW:
-                return Color.YELLOW;
-            case ConsoleColors.BLUE:
-                return Color.BLUE;
-            case ConsoleColors.PURPLE:
-                return new Color(128, 0, 128); // Custom color for PURPLE
-            case ConsoleColors.CYAN:
-                return Color.CYAN;
-            case ConsoleColors.BLACK:
-                return Color.BLACK;
-            case ConsoleColors.WHITE:
-                return Color.WHITE;
-            default:
-                return Color.GRAY; // Fallback color
-        }
+        return switch (ansiColor) {
+            case ConsoleColors.RED -> Color.RED;
+            case ConsoleColors.GREEN -> Color.GREEN;
+            case ConsoleColors.YELLOW -> Color.YELLOW;
+            case ConsoleColors.BLUE -> Color.BLUE;
+            case ConsoleColors.PURPLE -> new Color(128, 0, 128);
+            case ConsoleColors.CYAN -> Color.CYAN;
+            case ConsoleColors.BLACK -> Color.BLACK;
+            case ConsoleColors.WHITE -> Color.WHITE;
+            default -> Color.GRAY;
+        };
     }
 }

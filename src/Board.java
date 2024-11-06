@@ -6,41 +6,41 @@ import Model.Wall;
 
 import java.util.List;
 
+import java.util.Map;
+
 public class Board {
     public final int boardX;
     public final int boardY;
     public Square[][] squares;
     public int numOfColors;
-    public List<ColoredSquare> coloredSquares;
+    public Map<Integer, List<ColoredSquare>> coloredSquaresByColor;
     public Wall[] walls;
 
-    // ANSI Reset
-    public static final String RESET = "\033[0m";
+    private static final String RESET = "\033[0m";
 
-    public Board(int x, int y, int numOfColors,List<ColoredSquare> coloredSquares, Wall[] walls) {
+    public Board(int x, int y, int numOfColors, Map<Integer, List<ColoredSquare>> coloredSquaresByColor, Wall[] walls) {
         this.boardX = x;
         this.boardY = y;
-        this.coloredSquares = coloredSquares;
+        this.numOfColors = numOfColors;
+        this.coloredSquaresByColor = coloredSquaresByColor;
         this.walls = walls;
         this.squares = new Square[x][y];
-        this.numOfColors = numOfColors;
-         prepareBoard();
+        prepareBoard();
     }
-
+    //Empty Spaces
     private void prepareBoard() {
-        // Initialize  empty squares
         for (int i = 0; i < boardX; i++) {
             for (int j = 0; j < boardY; j++) {
                 squares[i][j] = new EmptySquare(new Position(i, j));
             }
         }
 
-        //  colored squares
-        for (ColoredSquare coloredSquare : coloredSquares) {
-            squares[coloredSquare.position.x][coloredSquare.position.y] = coloredSquare;
+        for (List<ColoredSquare> coloredSquareList : coloredSquaresByColor.values()) {
+            for (ColoredSquare coloredSquare : coloredSquareList) {
+                squares[coloredSquare.position.x][coloredSquare.position.y] = coloredSquare;
+            }
         }
 
-        //  walls
         for (Wall wall : walls) {
             squares[wall.position.x][wall.position.y] = wall;
         }

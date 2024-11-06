@@ -7,29 +7,29 @@ public class Logic {
 
     public static void main(String[] args) {
 //        UserLevel();
-        List<Board> levels = new ArrayList<>();
-
-        List<ColoredSquare> coloredSquares = Arrays.asList(
-                new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
-                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
-                new ColoredSquare(new Position(0, 2), " ■ ", ConsoleColors.PURPLE),  // Purple
-                new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE)   // Purple
-        );
-
-
-        // Initialize walls with predefined positions
-        Wall[] walls = {
-//                new Wall(new Position(0, 0)),
-//                new Wall(new Position(3, 3)),
-//                new Wall(new Position(0, 3)),
-//                new Wall(new Position(3, 0))
-        };
+//        List<Board> levels = new ArrayList<>();
 //
-        Board board = new Board(3, 3, 2,coloredSquares, walls);
-//        Board board = InitializeBoard();
-        board.displayBoard();
-        Structure.getAllPossibleMoves(board);
-//        Structure.applyMove(board,Move.UP);
+//        List<ColoredSquare> coloredSquares = Arrays.asList(
+//                new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
+//                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
+//                new ColoredSquare(new Position(0, 2), " ■ ", ConsoleColors.PURPLE),  // Purple
+//                new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE)   // Purple
+//        );
+//
+//
+//        // Initialize walls with predefined positions
+//        Wall[] walls = {
+////                new Wall(new Position(0, 0)),
+////                new Wall(new Position(3, 3)),
+////                new Wall(new Position(0, 3)),
+////                new Wall(new Position(3, 0))
+//        };
+////
+//        Board board = new Board(3, 3, 2,coloredSquares, walls);
+////        Board board = InitializeBoard();
+//        board.displayBoard();
+//        Structure.getAllPossibleMoves(board);
+////        Structure.applyMove(board,Move.UP);
 
 
 //
@@ -59,70 +59,76 @@ public class Logic {
 //            Structure.print(levels.get(i));
 //        }
 //    }
-public static Board InitializeBoard() {
-    System.out.print("Enter the size of the board X: ");
-    int boardX = scanner.nextInt();
-    System.out.print("Enter the size of the board Y: ");
-    int boardY = scanner.nextInt();
+    public static Board InitializeBoard() {
+        System.out.print("Enter the size of the board X: ");
+        int boardX = scanner.nextInt();
+        System.out.print("Enter the size of the board Y: ");
+        int boardY = scanner.nextInt();
 
-    Set<String> occupiedPositions = new HashSet<>();
-    System.out.print("How many Colors Do You need?");
-    int numOfColors = scanner.nextInt();
-    // Colored Squares
-    System.out.print("Enter the number of colored squares: ");
-    int numberOfColoredSquares = scanner.nextInt();
-    List<ColoredSquare> coloredSquares = new ArrayList<ColoredSquare>();
+        Set<String> occupiedPositions = new HashSet<>();
+        System.out.print("How many Colors Do You need? ");
+        int numOfColors = scanner.nextInt();
 
+        System.out.print("Enter the number of colored squares: ");
+        int numberOfColoredSquares = scanner.nextInt();
 
-    System.out.println("Choose a color for each colored square:");
-    System.out.println("1. Red\n2. Green\n3. Yellow\n4. Blue\n5. Purple\n6. Cyan\n7. White");
+        Map<Integer, List<ColoredSquare>> coloredSquaresByColor = new HashMap<>();
 
-    for (int i = 0; i < numberOfColoredSquares; i++) {
-        while (true) {
-            System.out.print("Enter the position of colored square " + (i + 1) + " (x y): ");
-            int x = scanner.nextInt();
-            int y = scanner.nextInt();
-            String pos = x + "," + y;
+        System.out.println("Choose a color for each colored square:");
+        System.out.println("1. Red\n2. Green\n3. Yellow\n4. Blue\n5. Purple\n6. Cyan\n7. White");
 
-            if (isValidPosition(x, y, boardX, boardY) && !occupiedPositions.contains(pos)) {
-                System.out.print("Enter your choice of color for square " + (i + 1) + ": ");
-                int colorChoice = scanner.nextInt();
-                String color = getColorFromChoice(colorChoice);
+        for (int i = 0; i < numberOfColoredSquares; i++) {
+            while (true) {
+                System.out.print("Enter the position of colored square " + (i + 1) + " (x y): ");
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                String pos = x + "," + y;
 
-               coloredSquares.add(new ColoredSquare(new Position(x, y), " ■ ", color));
-                occupiedPositions.add(pos);
-                break;
-            } else {
-                System.out.println("Invalid or occupied position. Please enter a unique position within the board boundaries.");
+                if (isValidPosition(x, y, boardX, boardY) && !occupiedPositions.contains(pos)) {
+                    System.out.print("Enter your choice of color for square " + (i + 1) + ": ");
+                    int colorChoice = scanner.nextInt();
+
+                    String color = getColorFromChoice(colorChoice);
+
+                    ColoredSquare coloredSquare = new ColoredSquare(new Position(x, y), " ■ ", color);
+
+                    // Add colored square to the list in the map for the chosen color
+                    coloredSquaresByColor
+                            .computeIfAbsent(colorChoice, k -> new ArrayList<>())
+                            .add(coloredSquare);
+
+                    occupiedPositions.add(pos);
+                    break;
+                } else {
+                    System.out.println("Invalid or occupied position. Please enter a unique position within the board boundaries.");
+                }
             }
         }
-    }
 
-    // Walls
-    System.out.print("Enter the number of walls: ");
-    int numberOfWalls = scanner.nextInt();
-    Wall[] walls = new Wall[numberOfWalls];
+        System.out.print("Enter the number of walls: ");
+        int numberOfWalls = scanner.nextInt();
+        Wall[] walls = new Wall[numberOfWalls];
 
-    for (int i = 0; i < numberOfWalls; i++) {
-        while (true) {
-            System.out.print("Enter the position of wall " + (i + 1) + " (x y): ");
-            int x = scanner.nextInt();
-            int y = scanner.nextInt();
-            String pos = x + "," + y;
+        for (int i = 0; i < numberOfWalls; i++) {
+            while (true) {
+                System.out.print("Enter the position of wall " + (i + 1) + " (x y): ");
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                String pos = x + "," + y;
 
-            if (isValidPosition(x, y, boardX, boardY) && !occupiedPositions.contains(pos)) {
-                walls[i] = new Wall(new Position(x, y));
-                occupiedPositions.add(pos);
-                break;
-            } else {
-                System.out.println("Invalid or occupied position. Please enter a unique position within the board boundaries.");
+                if (isValidPosition(x, y, boardX, boardY) && !occupiedPositions.contains(pos)) {
+                    walls[i] = new Wall(new Position(x, y));
+                    occupiedPositions.add(pos);
+                    break;
+                } else {
+                    System.out.println("Invalid or occupied position. Please enter a unique position within the board boundaries.");
+                }
             }
         }
+
+        return new Board(boardX, boardY, numOfColors, coloredSquaresByColor, walls);
     }
 
-
-    return new Board(boardX, boardY, numOfColors,coloredSquares, walls);
-}
     private static boolean isValidPosition(int x, int y, int boardX, int boardY) {
         return x >= 0 && x < boardX && y >= 0 && y < boardY;
     }
