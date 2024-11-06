@@ -64,8 +64,8 @@ public class Structure {
 
         } while (anySquareMoved); // Continue until no squares move in a pass
 
-        print(board);
-        getAllPossibleMoves(board);
+//        print(board);
+//        getAllPossibleMoves(board);
     }
 
 
@@ -78,6 +78,10 @@ public class Structure {
         return true; // Only one square per color
     }
 
+
+    public static boolean isFinalState(Node node) {
+     return checkGameFinished(node.board);
+    }
 
     public static void applyMoveOneSquare(Board board, ColoredSquare coloredSquare, Move move) {
         Position current = coloredSquare.position;

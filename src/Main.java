@@ -81,6 +81,7 @@ public class Main extends JPanel implements KeyListener {
         });
         board = board.cloneBoard();
         Node root = new Node(null, board);
+        Logic.generateNextStates(root);
         repaint();
     }
 
@@ -113,7 +114,6 @@ public class Main extends JPanel implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
-        System.out.println("Key pressed: " + e.getKeyCode()); // Debugging key press
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP -> Structure.applyMove(board, Move.UP);
             case KeyEvent.VK_DOWN -> Structure.applyMove(board, Move.DOWN);

@@ -59,10 +59,20 @@ public class Logic {
 //            Structure.print(levels.get(i));
 //        }
 //    }
-//    public static List<Node> generateNextStates(Board board){
-//
-//
-//    }
+public static List<Node> generateNextStates(Node node) {
+    List<Node> nextStates = new ArrayList<>();
+    for (Move move : Move.values()) {
+        Board clonedBoard = node.board.cloneBoard();
+        Structure.applyMove(clonedBoard, move);
+        Node newNode = new Node(node, clonedBoard);
+        newNode.PrintNode();
+        System.out.println();
+        nextStates.add(newNode);
+    }
+
+    return nextStates;
+}
+
 
     public static Board InitializeBoard() {
         System.out.print("Enter the size of the board X: ");
