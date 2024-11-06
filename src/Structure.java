@@ -69,35 +69,6 @@ public class Structure {
     }
 
 
-    public static void applyMove1(Board board, Move move) {
-        boolean moved;
-
-        do {
-            moved = false;
-
-            // Iterate through each color's list of squares
-            for (List<ColoredSquare> coloredSquareList : board.coloredSquaresByColor.values()) {
-                for (ColoredSquare coloredSquare : new ArrayList<>(coloredSquareList)) {
-                    if (canMove(board, coloredSquare, move)) {
-                        applyMoveOneSquare(board, coloredSquare, move);
-                        moved = true;
-                    }
-                }
-            }
-
-            // Check if the game is finished
-            if (checkGameFinished(board)) {
-                System.out.println("Game Finished");
-                print(board);
-                System.exit(0); // Exit
-            }
-
-            print(board);
-            getAllPossibleMoves(board);
-        } while (moved);
-    }
-
-
     public static boolean checkGameFinished(Board board) {
         for (List<ColoredSquare> coloredSquareList : board.coloredSquaresByColor.values()) {
             if (coloredSquareList.size() > 1) {
@@ -148,17 +119,6 @@ public class Structure {
         // Remove redundant same-colored squares after movement
         board.coloredSquaresByColor.get(coloredSquare.colorCode).removeAll(squaresToRemove);
 
-        // **New part**: After removing duplicates, check if the square can keep moving
-        next = getNextPosition(coloredSquare.position, move);
-        while (!isOutOfBounds(next, board) && board.squares[next.x][next.y].getSquareType() == SquareType.EMPTY) {
-            // Move the square further down if space is available
-            current = coloredSquare.position;
-            board.squares[current.x][current.y] = new EmptySquare(current);
-            board.squares[next.x][next.y] = coloredSquare;
-            coloredSquare.position = next;
-
-            next = getNextPosition(coloredSquare.position, move);
-        }
     }
 
     public static void getAllPossibleMoves(Board board) {

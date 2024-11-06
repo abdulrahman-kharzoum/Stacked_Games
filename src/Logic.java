@@ -59,6 +59,11 @@ public class Logic {
 //            Structure.print(levels.get(i));
 //        }
 //    }
+//    public static List<Node> generateNextStates(Board board){
+//
+//
+//    }
+
     public static Board InitializeBoard() {
         System.out.print("Enter the size of the board X: ");
         int boardX = scanner.nextInt();

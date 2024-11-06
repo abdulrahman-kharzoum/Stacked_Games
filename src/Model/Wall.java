@@ -9,6 +9,11 @@ public class Wall extends Square {
     }
 
     @Override
+    public Square clone() {
+        return new Wall(this.position.clone());
+    }
+
+    @Override
     public SquareType getSquareType() {
         return SquareType.WALL;
     }

@@ -47,4 +47,10 @@ public class ColoredSquare extends Square{
             default -> Color.GRAY;
         };
     }
+    @Override
+    public ColoredSquare clone() {
+        return new ColoredSquare(this.position.clone(), this.type, this.color);
+    }
+
+
 }

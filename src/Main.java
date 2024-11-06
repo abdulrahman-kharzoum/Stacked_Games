@@ -38,48 +38,49 @@ public class Main extends JPanel implements KeyListener {
         initialColoredSquares.add(new ColoredSquare(new Position(5, 2), " ■ ", ConsoleColors.PURPLE));
         initialColoredSquares.add(new ColoredSquare(new Position(5, 3), " ■ ", ConsoleColors.PURPLE));
         initialColoredSquares.add(new ColoredSquare(new Position(5, 4), " ■ ", ConsoleColors.PURPLE));
-        initialColoredSquares.add(new ColoredSquare(new Position(1,3 ), " ■ ", ConsoleColors.PURPLE));
-        initialColoredSquares.add(new ColoredSquare(new Position(1,4 ), " ■ ", ConsoleColors.PURPLE));
-        initialColoredSquares.add(new ColoredSquare(new Position(2,3 ), " ■ ", ConsoleColors.PURPLE));
-        initialColoredSquares.add(new ColoredSquare(new Position(2,4 ), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 3), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 4), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 3), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 4), " ■ ", ConsoleColors.PURPLE));
         resetBoard();
+
+        setLayout(new BorderLayout()); // Use BorderLayout for layout management
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
 
-        // Add reset button
+        // Add reset button at the bottom
         JButton resetButton = new JButton("Reset");
-        resetButton.addActionListener(e -> resetBoard());
-        add(resetButton);
+        resetButton.addActionListener(e -> {
+            resetBoard();  // Reset the board
+            requestFocusInWindow();  // Move focus back to the game panel
+        });
+        add(resetButton, BorderLayout.SOUTH); // Place button under the board
+
     }
 
     private void resetBoard() {
-        // Deep copy initialColoredSquares to reset colored squares
-        List<ColoredSquare> newSquares = new ArrayList<>();
-        for (ColoredSquare square : initialColoredSquares) {
-            newSquares.add(new ColoredSquare(new Position(square.position.x, square.position.y), square.type, square.color));
-        }
-
         Map<Integer, List<ColoredSquare>> coloredSquaresByColor = new HashMap<>();
 
         for (ColoredSquare square : initialColoredSquares) {
-
             int colorCode = square.colorCode;
-
             coloredSquaresByColor
                     .computeIfAbsent(colorCode, k -> new ArrayList<>())
                     .add(square);
         }
+
         board = new Board(6, 6, 2, coloredSquaresByColor, new Wall[]{
-                new Wall(new Position(1,1)),
-                new Wall(new Position(1,2)),
-                new Wall(new Position(2,1)),
-                new Wall(new Position(2,2)),
-                new Wall(new Position(3,3)),
-                new Wall(new Position(3,4)),
-                new Wall(new Position(4,3)),
-                new Wall(new Position(4,4))
+                new Wall(new Position(1, 1)),
+                new Wall(new Position(1, 2)),
+                new Wall(new Position(2, 1)),
+                new Wall(new Position(2, 2)),
+                new Wall(new Position(3, 3)),
+                new Wall(new Position(3, 4)),
+                new Wall(new Position(4, 3)),
+                new Wall(new Position(4, 4))
         });
+        board = board.cloneBoard();
+        Node root = new Node(null, board);
         repaint();
     }
 
@@ -112,6 +113,7 @@ public class Main extends JPanel implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
+        System.out.println("Key pressed: " + e.getKeyCode()); // Debugging key press
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP -> Structure.applyMove(board, Move.UP);
             case KeyEvent.VK_DOWN -> Structure.applyMove(board, Move.DOWN);
@@ -120,6 +122,8 @@ public class Main extends JPanel implements KeyListener {
         }
         repaint();
     }
+
+
 
     public void keyReleased(KeyEvent e) { }
 
@@ -130,9 +134,8 @@ public class Main extends JPanel implements KeyListener {
         Main gamePanel = new Main();
 
         frame.add(gamePanel);
-        frame.setSize(700, 700);
+        frame.setSize(700, 800); // Increased height to accommodate button
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
-
 }

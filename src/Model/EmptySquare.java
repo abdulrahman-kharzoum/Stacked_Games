@@ -8,6 +8,11 @@ public class EmptySquare extends Square {
     }
 
     @Override
+    public Square clone() {
+        return new EmptySquare(this.position.clone());
+    }
+
+    @Override
     public SquareType getSquareType() {
         return SquareType.EMPTY;
     }
