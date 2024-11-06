@@ -5,61 +5,7 @@ import java.util.*;
 public class Logic {
     static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
-//        UserLevel();
-//        List<Board> levels = new ArrayList<>();
-//
-//        List<ColoredSquare> coloredSquares = Arrays.asList(
-//                new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
-//                new ColoredSquare(new Position(2, 0), " ■ ", ConsoleColors.YELLOW),  // Yellow
-//                new ColoredSquare(new Position(0, 2), " ■ ", ConsoleColors.PURPLE),  // Purple
-//                new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE)   // Purple
-//        );
-//
-//
-//        // Initialize walls with predefined positions
-//        Wall[] walls = {
-////                new Wall(new Position(0, 0)),
-////                new Wall(new Position(3, 3)),
-////                new Wall(new Position(0, 3)),
-////                new Wall(new Position(3, 0))
-//        };
-////
-//        Board board = new Board(3, 3, 2,coloredSquares, walls);
-////        Board board = InitializeBoard();
-//        board.displayBoard();
-//        Structure.getAllPossibleMoves(board);
-////        Structure.applyMove(board,Move.UP);
-
-
-//
-//        System.out.println( Structure.canMove(levels.getFirst(),Move.UP));
-//        System.out.println( Structure.canMove(levels.getFirst(),Move.DOWN));
-//        System.out.println( Structure.canMove(levels.getFirst(),Move.LEFT));
-//        System.out.println( Structure.canMove(levels.getFirst(),Move.RIGHT));
-//
-//        Structure.applyMove(board,Move.LEFT);
-
-
-    }
-//    public static void UserLevel(){
-//        System.out.print("Enter the number of levels: ");
-//        int numberOfLevels = scanner.nextInt();
-//
-//        List<Board> levels = new ArrayList<>();
-//
-//        for (int i = 0; i < numberOfLevels; i++) {
-//            System.out.println("\nInitializing Level " + (i + 1) + ":");
-//            Board board = InitializeBoard();
-//            levels.add(board);
-//        }
-//
-//        for (int i = 0; i < levels.size(); i++) {
-//            System.out.println("\nLevel " + (i + 1) + " Board:");
-//            Structure.print(levels.get(i));
-//        }
-//    }
-public static List<Node> generateNextStates(Node node) {
+    public static List<Node> generateNextStates(Node node) {
     List<Node> nextStates = new ArrayList<>();
     for (Move move : Move.values()) {
         Board clonedBoard = node.board.cloneBoard();
@@ -140,7 +86,7 @@ public static List<Node> generateNextStates(Node node) {
                 }
             }
         }
-
+        System.out.println();
         return new Board(boardX, boardY, numOfColors, coloredSquaresByColor, walls);
     }
 

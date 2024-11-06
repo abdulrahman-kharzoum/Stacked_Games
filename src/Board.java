@@ -63,7 +63,7 @@ public class Board {
     }
 
     public Board cloneBoard() {
-        // Clone the `coloredSquaresByColor` map
+        // Clone the coloredSquaresByColor map
         Map<Integer, List<ColoredSquare>> clonedColoredSquaresByColor = new HashMap<>();
         for (Map.Entry<Integer, List<ColoredSquare>> entry : this.coloredSquaresByColor.entrySet()) {
             List<ColoredSquare> clonedList = new ArrayList<>();
@@ -73,7 +73,7 @@ public class Board {
             clonedColoredSquaresByColor.put(entry.getKey(), clonedList);
         }
 
-        // Clone `squares` array
+        // Clone squares array
         Square[][] clonedSquares = new Square[this.boardX][this.boardY];
         for (int i = 0; i < this.boardX; i++) {
             for (int j = 0; j < this.boardY; j++) {
@@ -81,7 +81,7 @@ public class Board {
             }
         }
 
-        // Create a new Board instance with cloned data
+        // Create a new Board
         return new Board(this.boardX, this.boardY, this.numOfColors, clonedColoredSquaresByColor, this.walls.clone());
     }
 

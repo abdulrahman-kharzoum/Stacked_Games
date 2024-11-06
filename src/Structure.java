@@ -44,12 +44,11 @@ public class Structure {
 
             for (int i = 0; i < board.boardX; i++) {
                 for (int j = 0; j < board.boardY; j++) {
-                    if (board.squares[i][j] instanceof ColoredSquare) {
-                        ColoredSquare square = (ColoredSquare) board.squares[i][j];
+                    if (board.squares[i][j] instanceof ColoredSquare square) {
 
                         if (canMove(board, square, move)) {
                             applyMoveOneSquare(board, square, move);
-                            anySquareMoved = true; // Mark that at least one square moved
+                            anySquareMoved = true;
                         }
                     }
                 }
@@ -64,8 +63,7 @@ public class Structure {
 
         } while (anySquareMoved); // Continue until no squares move in a pass
 
-//        print(board);
-//        getAllPossibleMoves(board);
+
     }
 
 
@@ -89,21 +87,20 @@ public class Structure {
 
         List<ColoredSquare> squaresToRemove = new ArrayList<>();
 
-        // Iterate while the next position is within bounds
         while (!isOutOfBounds(next, board)) {
             Square targetSquare = board.squares[next.x][next.y];
 
             if (targetSquare.getSquareType() == SquareType.WALL) {
-                break; // Stop if a wall is encountered
+                break; // wall
             } else if (targetSquare.getSquareType() == SquareType.COLORED) {
                 ColoredSquare targetColoredSquare = (ColoredSquare) targetSquare;
 
-                // If a differently-colored square blocks the move, stop.
+                // different color
                 if (!targetColoredSquare.color.equals(coloredSquare.color)) {
                     break;
                 }
 
-                // If it's a same-colored square, mark it for removal
+                // same color
                 List<ColoredSquare> sameColorSquares = board.coloredSquaresByColor.get(targetColoredSquare.colorCode);
                 if (sameColorSquares.size() > 1) {
                     squaresToRemove.add(targetColoredSquare);
@@ -111,16 +108,17 @@ public class Structure {
             }
 
             // Move the square to the new position
+            // leave empty space
             board.squares[current.x][current.y] = new EmptySquare(current);
             board.squares[next.x][next.y] = coloredSquare;
             coloredSquare.position = next;
 
-            // Prepare for next iteration
+            // next iteration
             current = next;
             next = getNextPosition(current, move);
         }
 
-        // Remove redundant same-colored squares after movement
+        // Remove  same-colored squares after movement
         board.coloredSquaresByColor.get(coloredSquare.colorCode).removeAll(squaresToRemove);
 
     }
