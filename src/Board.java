@@ -4,11 +4,7 @@ import Model.Position;
 import Model.Square;
 import Model.Wall;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import java.util.Map;
+import java.util.*;
 
 public class Board {
     public final int boardX;
@@ -84,5 +80,35 @@ public class Board {
         // Create a new Board
         return new Board(this.boardX, this.boardY, this.numOfColors, clonedColoredSquaresByColor, this.walls.clone());
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+
+        // Compare each square on the board
+        for (int i = 0; i < boardX; i++) {
+            for (int j = 0; j < boardY; j++) {
+                if (!this.squares[i][j].equals(board.squares[i][j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(boardX, boardY, numOfColors);
+
+        // Combine the hash of each square in the grid
+        for (int i = 0; i < boardX; i++) {
+            for (int j = 0; j < boardY; j++) {
+                result = 31 * result + squares[i][j].hashCode();
+            }
+        }
+        return result;
+    }
+
 
 }

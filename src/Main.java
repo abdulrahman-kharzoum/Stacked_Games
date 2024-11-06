@@ -29,14 +29,26 @@ public class Main extends JPanel implements KeyListener {
         // User Input
 //        board  = Logic.InitializeBoard().cloneBoard();
 //        board.displayBoard();
-//
+
+
         // Static Level 8
 
       level1 = Level.createLevel1();
       board = level1.getBoard().cloneBoard();
 
-//       Node root = new Node(null, board);
-//       Logic.generateNextStates(root);
+
+      // Next States
+       Node root = new Node(null, board);
+        Node solutionNode = Solver.dfs(root);  // Use BFS to find the solution
+
+        if (solutionNode != null) {
+            System.out.println("Solution found!");
+            // You can trace back to the root to print the solution path if needed
+        } else {
+            System.out.println("No solution exists.");
+        }
+
+
         repaint();
     }
 

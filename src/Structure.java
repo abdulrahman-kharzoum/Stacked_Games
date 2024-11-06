@@ -38,32 +38,45 @@ public class Structure {
     }
     public static void applyMove(Board board, Move move) {
         boolean anySquareMoved;
+        List<ColoredSquare> movableSquares = new ArrayList<>();  // Track squares able to move
+
+        // Initialize movable squares list
+        for (int i = 0; i < board.boardX; i++) {
+            for (int j = 0; j < board.boardY; j++) {
+                if (board.squares[i][j] instanceof ColoredSquare square) {
+                    movableSquares.add(square);
+                }
+            }
+        }
 
         do {
             anySquareMoved = false;
+            List<ColoredSquare> newMovableSquares = new ArrayList<>();  // Track squares that moved this pass
 
-            for (int i = 0; i < board.boardX; i++) {
-                for (int j = 0; j < board.boardY; j++) {
-                    if (board.squares[i][j] instanceof ColoredSquare square) {
-
-                        if (canMove(board, square, move)) {
-                            applyMoveOneSquare(board, square, move);
-                            anySquareMoved = true;
-                        }
-                    }
+            // Process each square that can potentially move
+            for (ColoredSquare square : movableSquares) {
+                if (canMove(board, square, move)) {  // Only check if not already blocked in the direction
+                    applyMoveOneSquare(board, square, move);
+                    newMovableSquares.add(square);  // Track moved squares for the next pass
+                    anySquareMoved = true;
                 }
             }
 
-            // Check if the game is finished after each pass
+            // Check if the game is finished after all squares have moved
             if (checkGameFinished(board)) {
                 System.out.println("Game Finished");
                 print(board);
                 System.exit(0); // Exit
             }
 
-        } while (anySquareMoved); // Continue until no squares move in a pass
+            // Update the movable squares list for the next pass
+            movableSquares = newMovableSquares;
 
+        } while (anySquareMoved);  // Continue until no squares moved in the last pass
 
+        print(board);
+        System.out.println();
+        Structure.getAllPossibleMoves(board);
     }
 
 
