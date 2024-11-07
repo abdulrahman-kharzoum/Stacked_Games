@@ -1,7 +1,7 @@
 public class Node {
     Node parent;
     Board board;
-
+//Todo: Add and Store the path to the solution with action.
 
     public Node(Node parent, Board board) {
         this.parent = parent;

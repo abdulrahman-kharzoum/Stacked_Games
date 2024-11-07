@@ -1,6 +1,7 @@
 package Model;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class ColoredSquare extends Square{
     public String color;
@@ -52,5 +53,17 @@ public class ColoredSquare extends Square{
         return new ColoredSquare(this.position.clone(), this.type, this.color);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ColoredSquare that = (ColoredSquare) o;
+        return colorCode == that.colorCode && Objects.equals(color, that.color);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), color, colorCode);
+    }
 }

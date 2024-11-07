@@ -51,20 +51,21 @@ public class Main extends JPanel implements KeyListener {
 
         // Static Level 8
 //
-//      level1 = Level.createLevel3();
-//      board = level1.getBoard().cloneBoard();
+      level1 = Level.createLevel8();
+      board = level1.getBoard().cloneBoard();
+//      board.displayBoard();
 
 
         // Next States
-//       Node root = new Node(null, board);
-//       Solver solver = new Solver();
-//        Node solutionNode = solver.bfs(root);
-//
-//        if (solutionNode != null) {
-//            System.out.println("Solution found!");
-//        } else {
-//            System.out.println("No solution exists.");
-//        }
+       Node root = new Node(null, board);
+
+        Node solutionNode = logic.dfs(root);
+
+        if (solutionNode != null) {
+            System.out.println("Solution found!");
+        } else {
+            System.out.println("No solution exists.");
+        }
 
 
         repaint();

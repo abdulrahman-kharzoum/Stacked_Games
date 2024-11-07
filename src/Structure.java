@@ -37,21 +37,17 @@ public class Structure {
         return false;
     }
 
+
     public  void applyMove(Board board, Move move) {
         boolean anySquareMoved;
 
         do {
             anySquareMoved = false;
 
-            for (int i = 0; i < board.boardX; i++) {
-                for (int j = 0; j < board.boardY; j++) {
-                    if (board.squares[i][j] instanceof ColoredSquare square) {
-
-                        if (canMove(board, square, move)) {
-                            applyMoveOneSquare(board, square, move);
-                            anySquareMoved = true;
-                        }
-                    }
+            for (ColoredSquare coloredSquare : board.coloredSquares){
+                if (canMove(board, coloredSquare, move)) {
+                    applyMoveOneSquare(board, coloredSquare, move);
+                    anySquareMoved = true;
                 }
             }
 
@@ -59,13 +55,13 @@ public class Structure {
             if (checkGameFinished(board)) {
                 System.out.println("Game Finished");
                 print(board);
-                System.exit(0); // Exit
+//                System.exit(0); // Exit
             }
 
-        } while (anySquareMoved); // Continue until no squares move in a pass
+        } while (anySquareMoved);
         print(board);
         System.out.println();
-        getAllPossibleMoves(board);
+//        getAllPossibleMoves(board);
 
     }
     public  boolean checkGameFinished(Board board) {
