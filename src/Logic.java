@@ -3,13 +3,14 @@ import Model.*;
 import java.util.*;
 
 public class Logic {
+    Structure structure = new Structure();
     static Scanner scanner = new Scanner(System.in);
 
-    public static List<Node> generateNextStates(Node node) {
+    public  List<Node> generateNextStates(Node node) {
     List<Node> nextStates = new ArrayList<>();
     for (Move move : Move.values()) {
         Board clonedBoard = node.board.cloneBoard();
-        Structure.applyMove(clonedBoard, move);
+        structure.applyMove(clonedBoard, move);
         Node newNode = new Node(node, clonedBoard);
         newNode.PrintNode();
         System.out.println();
@@ -20,7 +21,7 @@ public class Logic {
 }
 
 
-    public static Board InitializeBoard() {
+    public  Board InitializeBoard() {
         System.out.print("Enter the size of the board X: ");
         int boardX = scanner.nextInt();
         System.out.print("Enter the size of the board Y: ");
@@ -94,7 +95,7 @@ public class Logic {
         return x >= 0 && x < boardX && y >= 0 && y < boardY;
     }
 
-    private static String getColorFromChoice(int choice) {
+    private  String getColorFromChoice(int choice) {
         switch (choice) {
             case 1: return ConsoleColors.RED;
             case 2: return ConsoleColors.GREEN;

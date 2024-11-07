@@ -10,7 +10,7 @@ public class Structure {
         board.displayBoard();
     }
 
-    static boolean canMove(Board board, ColoredSquare coloredSquare, Move move) {
+     boolean canMove(Board board, ColoredSquare coloredSquare, Move move) {
         Position nextPosition = getNextPosition(coloredSquare.position, move);
 
         while (!isOutOfBounds(nextPosition, board)) {
@@ -25,8 +25,8 @@ public class Structure {
 
                 if (!targetColoredSquare.color.equals(coloredSquare.color)) {
                     // different -color =>  can't move
-                    return canMove(board,targetColoredSquare,move);
-                }else {
+                    return canMove(board, targetColoredSquare, move);
+                } else {
                     return true;
                 }
             }
@@ -36,51 +36,39 @@ public class Structure {
 
         return false;
     }
-    public static void applyMove(Board board, Move move) {
-        boolean anySquareMoved;
-        List<ColoredSquare> movableSquares = new ArrayList<>();  // Track squares able to move
 
-        // Initialize movable squares list
-        for (int i = 0; i < board.boardX; i++) {
-            for (int j = 0; j < board.boardY; j++) {
-                if (board.squares[i][j] instanceof ColoredSquare square) {
-                    movableSquares.add(square);
-                }
-            }
-        }
+    public  void applyMove(Board board, Move move) {
+        boolean anySquareMoved;
 
         do {
             anySquareMoved = false;
-            List<ColoredSquare> newMovableSquares = new ArrayList<>();  // Track squares that moved this pass
 
-            // Process each square that can potentially move
-            for (ColoredSquare square : movableSquares) {
-                if (canMove(board, square, move)) {  // Only check if not already blocked in the direction
-                    applyMoveOneSquare(board, square, move);
-                    newMovableSquares.add(square);  // Track moved squares for the next pass
-                    anySquareMoved = true;
+            for (int i = 0; i < board.boardX; i++) {
+                for (int j = 0; j < board.boardY; j++) {
+                    if (board.squares[i][j] instanceof ColoredSquare square) {
+
+                        if (canMove(board, square, move)) {
+                            applyMoveOneSquare(board, square, move);
+                            anySquareMoved = true;
+                        }
+                    }
                 }
             }
 
-            // Check if the game is finished after all squares have moved
+            // Check if the game is finished after each pass
             if (checkGameFinished(board)) {
                 System.out.println("Game Finished");
                 print(board);
                 System.exit(0); // Exit
             }
 
-            // Update the movable squares list for the next pass
-            movableSquares = newMovableSquares;
-
-        } while (anySquareMoved);  // Continue until no squares moved in the last pass
-
+        } while (anySquareMoved); // Continue until no squares move in a pass
         print(board);
         System.out.println();
-        Structure.getAllPossibleMoves(board);
+        getAllPossibleMoves(board);
+
     }
-
-
-    public static boolean checkGameFinished(Board board) {
+    public  boolean checkGameFinished(Board board) {
         for (List<ColoredSquare> coloredSquareList : board.coloredSquaresByColor.values()) {
             if (coloredSquareList.size() > 1) {
                 return false;
@@ -90,11 +78,11 @@ public class Structure {
     }
 
 
-    public static boolean isFinalState(Node node) {
-     return checkGameFinished(node.board);
+    public  boolean isFinalState(Node node) {
+        return checkGameFinished(node.board);
     }
 
-    public static void applyMoveOneSquare(Board board, ColoredSquare coloredSquare, Move move) {
+    public void applyMoveOneSquare(Board board, ColoredSquare coloredSquare, Move move) {
         Position current = coloredSquare.position;
         Position next = getNextPosition(current, move);
 
@@ -136,7 +124,7 @@ public class Structure {
 
     }
 
-    public static void getAllPossibleMoves(Board board) {
+    public  void getAllPossibleMoves(Board board) {
         for (Map.Entry<Integer, List<ColoredSquare>> entry : board.coloredSquaresByColor.entrySet()) {
             for (ColoredSquare coloredSquare : entry.getValue()) {
                 List<Move> possibleMoves = new ArrayList<>();
@@ -145,16 +133,16 @@ public class Structure {
                         possibleMoves.add(move);
                     }
                 }
-                System.out.println("Possible moves for ColoredSquare with code "+coloredSquare.colorCode+" at position " + coloredSquare.position + ": " + possibleMoves);
+                System.out.println("Possible moves for ColoredSquare with code " + coloredSquare.colorCode + " at position " + coloredSquare.position + ": " + possibleMoves);
             }
         }
     }
 
-    private static Position getNextPosition(Position current, Move move) {
+    private  Position getNextPosition(Position current, Move move) {
         return new Position(current.x + move.getMoveX(), current.y + move.getMoveY());
     }
 
-    private static boolean isOutOfBounds(Position pos, Board board) {
+    private  boolean isOutOfBounds(Position pos, Board board) {
         return pos.x < 0 || pos.x >= board.boardX || pos.y < 0 || pos.y >= board.boardY;
     }
 }

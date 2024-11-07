@@ -21,7 +21,7 @@ public class Level {
     }
 
 
-    public static Level createLevel1() {
+    public static Level createLevel8() {
         List<ColoredSquare> initialColoredSquares = new ArrayList<>();
         initialColoredSquares.add(new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.BLUE));
         initialColoredSquares.add(new ColoredSquare(new Position(0, 1), " ■ ", ConsoleColors.BLUE));
@@ -71,5 +71,76 @@ public class Level {
         };
 
         return new Level(6, 6, 2, coloredSquaresByColor, walls);
+    }
+
+
+    public static Level createLevel1(){
+        List<ColoredSquare> initialColoredSquares = new ArrayList<>();
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.YELLOW));
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 1), " ■ ", ConsoleColors.YELLOW));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 0), " ■ ", ConsoleColors.YELLOW));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 1), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 2), " ■ ", ConsoleColors.GREEN));
+        Map<Integer, List<ColoredSquare>> coloredSquaresByColor = new HashMap<>();
+        for (ColoredSquare square : initialColoredSquares) {
+            coloredSquaresByColor
+                    .computeIfAbsent(square.colorCode, k -> new ArrayList<>())
+                    .add(square);
+        }
+        Wall[] walls = new Wall[]{
+                new Wall(new Position(1, 1)),
+
+        };
+        return new Level(3, 3, 2, coloredSquaresByColor, walls);
+    }
+    public static Level createLevel2(){
+        List<ColoredSquare> initialColoredSquares = new ArrayList<>();
+        Map<Integer, List<ColoredSquare>> coloredSquaresByColor = new HashMap<>();
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 1), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 3), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 0), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 2), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 1), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 1), " ■ ", ConsoleColors.YELLOW));
+        initialColoredSquares.add(new ColoredSquare(new Position(3, 3), " ■ ", ConsoleColors.YELLOW));
+        for (ColoredSquare square : initialColoredSquares) {
+            coloredSquaresByColor
+                    .computeIfAbsent(square.colorCode, k -> new ArrayList<>())
+                    .add(square);
+        }
+        Wall[] walls = new Wall[]{
+
+
+        };
+        return new Level(4, 4, 2, coloredSquaresByColor, walls);
+    }
+    public static Level createLevel3(){
+        List<ColoredSquare> initialColoredSquares = new ArrayList<>();
+        Map<Integer, List<ColoredSquare>> coloredSquaresByColor = new HashMap<>();
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 0), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 2), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 3), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 1), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 4), " ■ ", ConsoleColors.GREEN));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 0), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 2), " ■ ", ConsoleColors.PURPLE));
+        initialColoredSquares.add(new ColoredSquare(new Position(0, 1), " ■ ", ConsoleColors.BLUE));
+        initialColoredSquares.add(new ColoredSquare(new Position(1, 3), " ■ ", ConsoleColors.BLUE));
+        initialColoredSquares.add(new ColoredSquare(new Position(2, 3), " ■ ", ConsoleColors.BLUE));
+
+        for (ColoredSquare square : initialColoredSquares) {
+            coloredSquaresByColor
+                    .computeIfAbsent(square.colorCode, k -> new ArrayList<>())
+                    .add(square);
+        }
+        Wall[] walls = new Wall[]{
+                new Wall(new Position(1,1)),
+                new Wall(new Position(1,2)),
+
+
+        };
+        return new Level(3, 5, 3, coloredSquaresByColor, walls);
     }
 }

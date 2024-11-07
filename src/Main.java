@@ -1,11 +1,21 @@
 import Model.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Main extends JPanel implements KeyListener {
+    Logic logic = new Logic();
+    Board clone = null;
+
+    boolean isrest = false;
+
     private Board board;
     Level level1;
+
     public Main() {
 
         resetBoard();
@@ -27,30 +37,38 @@ public class Main extends JPanel implements KeyListener {
 
     private void resetBoard() {
         // User Input
-//        board  = Logic.InitializeBoard().cloneBoard();
-//        board.displayBoard();
+
+            if (!isrest) {
+                board = logic.InitializeBoard().cloneBoard();
+                clone = board.cloneBoard();
+                isrest = true;
+            } else {
+                board = clone.cloneBoard();  // Deep-clone `clone` to reset `board` without affecting `clone`
+                board.displayBoard();
+                System.out.println();
+            }
 
 
         // Static Level 8
+//
+//      level1 = Level.createLevel3();
+//      board = level1.getBoard().cloneBoard();
 
-      level1 = Level.createLevel1();
-      board = level1.getBoard().cloneBoard();
 
-
-      // Next States
-       Node root = new Node(null, board);
-        Node solutionNode = Solver.dfs(root);  // Use BFS to find the solution
-
-        if (solutionNode != null) {
-            System.out.println("Solution found!");
-            // You can trace back to the root to print the solution path if needed
-        } else {
-            System.out.println("No solution exists.");
-        }
+        // Next States
+//       Node root = new Node(null, board);
+//       Solver solver = new Solver();
+//        Node solutionNode = solver.bfs(root);
+//
+//        if (solutionNode != null) {
+//            System.out.println("Solution found!");
+//        } else {
+//            System.out.println("No solution exists.");
+//        }
 
 
         repaint();
-    }
+}
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -82,19 +100,20 @@ public class Main extends JPanel implements KeyListener {
 
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP -> Structure.applyMove(board, Move.UP);
-            case KeyEvent.VK_DOWN -> Structure.applyMove(board, Move.DOWN);
-            case KeyEvent.VK_LEFT -> Structure.applyMove(board, Move.LEFT);
-            case KeyEvent.VK_RIGHT -> Structure.applyMove(board, Move.RIGHT);
+            case KeyEvent.VK_UP -> logic.structure.applyMove(board, Move.UP);
+            case KeyEvent.VK_DOWN -> logic.structure.applyMove(board, Move.DOWN);
+            case KeyEvent.VK_LEFT -> logic.structure.applyMove(board, Move.LEFT);
+            case KeyEvent.VK_RIGHT -> logic.structure.applyMove(board, Move.RIGHT);
         }
         repaint();
     }
 
 
+    public void keyReleased(KeyEvent e) {
+    }
 
-    public void keyReleased(KeyEvent e) { }
-
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Stacked Game");
