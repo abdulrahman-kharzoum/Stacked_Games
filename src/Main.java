@@ -37,16 +37,16 @@ public class Main extends JPanel implements KeyListener {
 
     private void resetBoard() {
         // User Input
-
-            if (!isrest) {
-                board = logic.InitializeBoard().cloneBoard();
-                clone = board.cloneBoard();
-                isrest = true;
-            } else {
-                board = clone.cloneBoard();  // Deep-clone `clone` to reset `board` without affecting `clone`
-                board.displayBoard();
-                System.out.println();
-            }
+//
+//            if (!isrest) {
+//                board = logic.InitializeBoard().cloneBoard();
+//                clone = board.cloneBoard();
+//                isrest = true;
+//            } else {
+//                board = clone.cloneBoard();
+//                board.displayBoard();
+//                System.out.println();
+//            }
 
 
         // Static Level 8
