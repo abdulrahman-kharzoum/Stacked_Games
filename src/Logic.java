@@ -12,6 +12,7 @@ public class Logic {
         Board clonedBoard = node.board.cloneBoard();
         structure.applyMove(clonedBoard, move);
         Node newNode = new Node(node, clonedBoard);
+        newNode.action = move;
 //        newNode.PrintNode();
 //        System.out.println();
         nextStates.add(newNode);
@@ -20,7 +21,7 @@ public class Logic {
     return nextStates;
 }
 
-    public  Node bfs(Node root) {
+    public Node bfs(Node root) {
         Queue<Node> queue = new LinkedList<>();
         Set<Board> visited = new HashSet<>();  // Track visited boards to avoid loops
         queue.add(root);
@@ -28,10 +29,16 @@ public class Logic {
 
         while (!queue.isEmpty()) {
             Node node = queue.poll();
+            node.PrintNode();
 
             // Check if this node is the final state
             if (structure.isFinalState(node)) {
-                System.out.println("visitd nodes: "+visited.size());
+                System.out.println("Visited nodes: " + visited.size());
+                List<Move> pathToSolution = node.getPath();
+                System.out.println("Solution found! Path to solution:");
+                for (Move move : pathToSolution) {
+                    System.out.println(move);
+                }
                 return node; // Solution found
             }
 

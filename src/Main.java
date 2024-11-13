@@ -56,16 +56,16 @@ public class Main extends JPanel implements KeyListener {
 //      board.displayBoard();
 
 
-        // Next States
-       Node root = new Node(null, board);
-
-        Node solutionNode = logic.dfs(root);
-
-        if (solutionNode != null) {
-            System.out.println("Solution found!");
-        } else {
-            System.out.println("No solution exists.");
-        }
+//        // Next States
+//       Node root = new Node(null, board);
+//
+//        Node solutionNode = logic.bfs(root);
+//
+//        if (solutionNode != null) {
+//            System.out.println("Solution found!");
+//        } else {
+//            System.out.println("No solution exists.");
+//        }
 
 
         repaint();
