@@ -134,6 +134,17 @@ public class Main extends JPanel implements KeyListener {
                 }
                 break;
             }
+            case 4:
+            {
+                Node solutionNode = solver.ucs(root);
+
+                if (solutionNode != null) {
+                    System.out.println("Solution found!");
+                } else {
+                    System.out.println("No solution exists.");
+                }
+                break;
+            }
             default:{
 
             }

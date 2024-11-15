@@ -38,9 +38,9 @@ public class Structure {
         return false;
     }
 
-    public void applyMove(Board board, Move move) {
+    public int applyMove(Board board, Move move) {
         boolean anySquareMoved;
-
+        int removedSquares = 0;
         do {
             anySquareMoved = false;
 
@@ -48,7 +48,7 @@ public class Structure {
                 for (int j = 0; j < board.boardY; j++) {
                     if (board.squares[i][j] instanceof ColoredSquare square) {
                         if (canMove(board, square, move)) {
-                            applyMoveOneSquare(board, square, move);
+                           removedSquares=  applyMoveOneSquare(board, square, move,removedSquares);
                             anySquareMoved = true;
                         }
                     }
@@ -63,6 +63,7 @@ public class Structure {
             }
 
         } while (anySquareMoved);
+        return removedSquares;
     }
 
 
@@ -96,7 +97,7 @@ public class Structure {
     }
 
 
-    public void applyMoveOneSquare(Board board, ColoredSquare coloredSquare, Move move) {
+    public int applyMoveOneSquare(Board board, ColoredSquare coloredSquare, Move move,int removedSquares) {
         Position current = coloredSquare.position;
         Position next = getNextPosition(current, move);
 
@@ -142,6 +143,7 @@ public class Structure {
                 // Only remove the square if there are more than 1 square of that color
                 if (sameColorSquares.size() > 1) {
                     sameColorSquares.remove(squareToRemove); // Remove the square
+                    removedSquares++;
                 }
             }
         }
@@ -149,6 +151,7 @@ public class Structure {
 //        System.out.println("After move:");
 //        board.displayBoard();
 //        System.out.println(board.coloredSquaresByColor);
+        return  removedSquares;
     }
 
     public  void getAllPossibleMoves(Board board) {

@@ -7,10 +7,17 @@ public class Node {
     Node parent;
     Board board;
     Move action;
+    int cost;
 
     public Node(Node parent, Board board) {
         this.parent = parent;
         this.board = board;
+    }
+    public Node(Node parent, Board board,int cost, Move action) {
+        this.parent = parent;
+        this.board = board;
+        this.cost= cost;
+        this.action = action;
     }
     public void PrintNode(){
         System.out.println("ACTION : "+ action);
@@ -31,16 +38,24 @@ public class Node {
         return path;
     }
 
+    public int getCost() {
+        return cost;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        return Objects.equals(parent, node.parent) && Objects.equals(board, node.board) && action == node.action;
+        return cost == node.cost &&
+                Objects.equals(parent, node.parent) &&
+                Objects.equals(board, node.board) &&
+                action == node.action;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(parent, board, action);
+        return Objects.hash(parent, board, action, cost);
     }
 }

@@ -6,7 +6,7 @@ public class Logic {
     Structure structure = new Structure();
     static Scanner scanner = new Scanner(System.in);
 
-    public  List<Node> generateNextStates(Node node) {
+    public List<Node> generateNextStates(Node node) {
         List<Node> nextStates = new ArrayList<>();
         for (Move move : Move.values()) {
             Board clonedBoard = node.board.cloneBoard();
@@ -19,6 +19,25 @@ public class Logic {
         }
 
         return nextStates;
+    }
+
+    public List<Node> generateNextCostStates(Node node) {
+        List<Node> nextCostStates = new ArrayList<>();
+        var thisBoard = node.board;
+        for (Move move : Move.values()) {
+            Board clonedBoard = thisBoard.cloneBoard();
+            int removedSquares = structure.applyMove(clonedBoard, move);
+            if (removedSquares > 0) {
+                int newCost = node.cost - removedSquares;
+                Node newNode = new Node(node, clonedBoard, newCost, move);
+                nextCostStates.add(newNode);
+                //        newNode.PrintNode();
+                //        System.out.println();
+
+            }
+        }
+
+        return nextCostStates;
     }
 
     public Node bfs(Node root) {
@@ -38,6 +57,31 @@ public class Logic {
             for (Node nextState : generateNextStates(node)) {
                 if (!visited.contains(nextState.board)) {
                     queue.add(nextState);
+                    visited.add(nextState.board);
+                }
+            }
+        }
+
+        return null; // No solution found
+    }
+
+    public Node ucs(Node root) {
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Node::getCost));
+        Set<Board> visited = new HashSet<>();
+        priorityQueue.add(root);
+        visited.add(root.board);
+
+        while (!priorityQueue.isEmpty()) {
+            Node node = priorityQueue.poll();
+            node.PrintNode();
+
+
+            if (FinalState(visited, node)) return node; // Solution found
+
+            // Generate all possible next states
+            for (Node nextState : generateNextCostStates(node)) {
+                if (!visited.contains(nextState.board)) {
+                    priorityQueue.add(nextState);
                     visited.add(nextState.board);
                 }
             }
@@ -88,13 +132,13 @@ public class Logic {
 
         node.PrintNode();
 
-       if (FinalState(visited, node)) return node;
+        if (FinalState(visited, node)) return node;
 
-       visited.add(node.board);
+        visited.add(node.board);
 
         for (Node nextState : generateNextStates(node)) {
             if (!visited.contains(nextState.board)) {
-               Node result = dfsUsingRecursion(nextState, visited);
+                Node result = dfsUsingRecursion(nextState, visited);
                 if (result != null) return result;
             }
         }
@@ -103,7 +147,7 @@ public class Logic {
     }
 
 
-    public  Board InitializeBoard() {
+    public Board InitializeBoard() {
         System.out.print("Enter the size of the board X: ");
         int boardX = scanner.nextInt();
         System.out.print("Enter the size of the board Y: ");
@@ -137,9 +181,7 @@ public class Logic {
                     ColoredSquare coloredSquare = new ColoredSquare(new Position(x, y), " ■ ", color);
 
                     // Add colored square to the list in the map for the chosen color
-                    coloredSquaresByColor
-                            .computeIfAbsent(colorChoice, k -> new ArrayList<>())
-                            .add(coloredSquare);
+                    coloredSquaresByColor.computeIfAbsent(colorChoice, k -> new ArrayList<>()).add(coloredSquare);
 
                     occupiedPositions.add(pos);
                     break;
@@ -177,15 +219,22 @@ public class Logic {
         return x >= 0 && x < boardX && y >= 0 && y < boardY;
     }
 
-    private  String getColorFromChoice(int choice) {
+    private String getColorFromChoice(int choice) {
         switch (choice) {
-            case 1: return ConsoleColors.RED;
-            case 2: return ConsoleColors.GREEN;
-            case 3: return ConsoleColors.YELLOW;
-            case 4: return ConsoleColors.BLUE;
-            case 5: return ConsoleColors.PURPLE;
-            case 6: return ConsoleColors.CYAN;
-            case 7: return ConsoleColors.WHITE;
+            case 1:
+                return ConsoleColors.RED;
+            case 2:
+                return ConsoleColors.GREEN;
+            case 3:
+                return ConsoleColors.YELLOW;
+            case 4:
+                return ConsoleColors.BLUE;
+            case 5:
+                return ConsoleColors.PURPLE;
+            case 6:
+                return ConsoleColors.CYAN;
+            case 7:
+                return ConsoleColors.WHITE;
             default:
                 System.out.println("Invalid choice. Defaulting to White.");
                 return ConsoleColors.WHITE;
