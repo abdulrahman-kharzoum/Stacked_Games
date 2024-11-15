@@ -69,7 +69,6 @@ public class Level {
                 new Wall(new Position(4, 3)),
                 new Wall(new Position(4, 4))
         };
-
         return new Level(6, 6, 2, coloredSquaresByColor, walls);
     }
 

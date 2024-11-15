@@ -7,19 +7,80 @@ public class Logic {
     static Scanner scanner = new Scanner(System.in);
 
     public  List<Node> generateNextStates(Node node) {
-    List<Node> nextStates = new ArrayList<>();
-    for (Move move : Move.values()) {
-        Board clonedBoard = node.board.cloneBoard();
-        structure.applyMove(clonedBoard, move);
-        Node newNode = new Node(node, clonedBoard);
-        newNode.PrintNode();
-        System.out.println();
-        nextStates.add(newNode);
+        List<Node> nextStates = new ArrayList<>();
+        for (Move move : Move.values()) {
+            Board clonedBoard = node.board.cloneBoard();
+            structure.applyMove(clonedBoard, move);
+            Node newNode = new Node(node, clonedBoard);
+            newNode.action = move;
+//        newNode.PrintNode();
+//        System.out.println();
+            nextStates.add(newNode);
+        }
+
+        return nextStates;
     }
 
-    return nextStates;
-}
+    public Node bfs(Node root) {
+        Queue<Node> queue = new LinkedList<>();
+        Set<Board> visited = new HashSet<>();
+        queue.add(root);
+        visited.add(root.board);
 
+        while (!queue.isEmpty()) {
+            Node node = queue.poll();
+            node.PrintNode();
+
+            // Check if this node is the final state
+            if (structure.isFinalState(node)) {
+                System.out.println("Visited nodes: " + visited.size());
+                List<Move> pathToSolution = node.getPath();
+                System.out.println("Solution found! Path to solution:");
+                for (Move move : pathToSolution) {
+                    System.out.println(move);
+                }
+                return node; // Solution found
+            }
+
+            // Generate all possible next states
+            for (Node nextState : generateNextStates(node)) {
+                if (!visited.contains(nextState.board)) {
+                    queue.add(nextState);
+                    visited.add(nextState.board);
+                }
+            }
+        }
+
+        return null; // No solution found
+    }
+    public Node dfsRecall(Node node, Set<Board> visited) {
+        if (structure.isFinalState(node)) {
+            System.out.println("Visited nodes: " + visited.size());
+            List<Move> pathToSolution = node.getPath();
+            System.out.println("Solution found! Path to solution:");
+            for (Move move : pathToSolution) {
+                System.out.println(move);
+            }
+            return node; // Solution found
+        }
+
+        for (Node nextState : generateNextStates(node)) {
+            if (!visited.contains(nextState.board)) {
+                visited.add(nextState.board);
+                Node result = dfsRecall(nextState, visited);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null; // No solution found
+    }
+
+    public Node dfs(Node root) {
+        Set<Board> visited = new HashSet<>();
+        visited.add(root.board);
+        return dfsRecall(root, visited);
+    }
 
     public  Board InitializeBoard() {
         System.out.print("Enter the size of the board X: ");

@@ -24,11 +24,13 @@ public class ConsoleColors {
         public static final String CYAN_BOLD = "\033[1;36m";   // CYAN
         public static final String WHITE_BOLD = "\033[1;37m";  // WHITE
 
-        public static void main(String[] args) {
-            System.out.println(RED + "This is red text" + RESET);
-            System.out.println(GREEN_BOLD + "This is bold green text" + RESET);
-            System.out.println(YELLOW + "This is yellow text" + RESET);
-            System.out.println(BLUE + "This is blue text" + RESET);
-            System.out.println(PURPLE + "This is purple text" + RESET);
-        }
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+}

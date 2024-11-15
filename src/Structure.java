@@ -1,6 +1,7 @@
 import Model.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class Structure {
         return false;
     }
 
-    public  void applyMove(Board board, Move move) {
+    public void applyMove(Board board, Move move) {
         boolean anySquareMoved;
 
         do {
@@ -46,7 +47,6 @@ public class Structure {
             for (int i = 0; i < board.boardX; i++) {
                 for (int j = 0; j < board.boardY; j++) {
                     if (board.squares[i][j] instanceof ColoredSquare square) {
-
                         if (canMove(board, square, move)) {
                             applyMoveOneSquare(board, square, move);
                             anySquareMoved = true;
@@ -55,73 +55,103 @@ public class Structure {
                 }
             }
 
-            // Check if the game is finished after each pass
+
             if (checkGameFinished(board)) {
                 System.out.println("Game Finished");
                 print(board);
-                System.exit(0); // Exit
+                break;
             }
 
-        } while (anySquareMoved); // Continue until no squares move in a pass
-        print(board);
-        System.out.println();
-        getAllPossibleMoves(board);
-
+        } while (anySquareMoved);
     }
-    public  boolean checkGameFinished(Board board) {
-        for (List<ColoredSquare> coloredSquareList : board.coloredSquaresByColor.values()) {
-            if (coloredSquareList.size() > 1) {
+
+
+
+    public boolean checkGameFinished(Board board) {
+        // Check if each color only has one square remaining
+        for (Map.Entry<Integer, List<ColoredSquare>> entry : board.coloredSquaresByColor.entrySet()) {
+            List<ColoredSquare> coloredSquareList = entry.getValue();
+
+            // If no squares or more than one square of a color, the game is not finished
+            if (coloredSquareList == null || coloredSquareList.size() != 1) {
                 return false;
             }
         }
-        return true; // Only one square per color
+
+        // Ensure that all expected colors are present
+        if (board.coloredSquaresByColor.size() != board.numOfColors) {
+            return false; // Missing colors
+        }
+
+        return true; // Game finished if only one square per color and all colors are present
     }
 
+    public boolean isFinalState(Node node) {
+        Map<Integer, List<ColoredSquare>> map = node.board.coloredSquaresByColor;
 
-    public  boolean isFinalState(Node node) {
-        return checkGameFinished(node.board);
+        // Check if exactly one square exists for each color
+        for (Map.Entry<Integer, List<ColoredSquare>> entry : map.entrySet()) {
+            if (entry.getValue().size() != 1) {
+                return false; // More than one or none of this color
+            }
+        }
+        return true;
     }
+
 
     public void applyMoveOneSquare(Board board, ColoredSquare coloredSquare, Move move) {
         Position current = coloredSquare.position;
         Position next = getNextPosition(current, move);
 
-        List<ColoredSquare> squaresToRemove = new ArrayList<>();
+        List<ColoredSquare> squaresToRemove = new ArrayList<>(); // This will track squares that need to be removed
 
         while (!isOutOfBounds(next, board)) {
             Square targetSquare = board.squares[next.x][next.y];
 
             if (targetSquare.getSquareType() == SquareType.WALL) {
-                break; // wall
+                break; // Wall hit, stop moving
             } else if (targetSquare.getSquareType() == SquareType.COLORED) {
                 ColoredSquare targetColoredSquare = (ColoredSquare) targetSquare;
 
-                // different color
+                // Different color: stop moving
                 if (!targetColoredSquare.color.equals(coloredSquare.color)) {
                     break;
                 }
 
-                // same color
+                // Same color: check if there's a conflict
                 List<ColoredSquare> sameColorSquares = board.coloredSquaresByColor.get(targetColoredSquare.colorCode);
+
+                // Ensure not removing the last square of a color
                 if (sameColorSquares.size() > 1) {
-                    squaresToRemove.add(targetColoredSquare);
+                    squaresToRemove.add(targetColoredSquare); // Only remove if there's more than one square of that color
                 }
             }
 
             // Move the square to the new position
-            // leave empty space
-            board.squares[current.x][current.y] = new EmptySquare(current);
-            board.squares[next.x][next.y] = coloredSquare;
-            coloredSquare.position = next;
+            board.squares[current.x][current.y] = new EmptySquare(current); // Clear the old position
+            board.squares[next.x][next.y] = coloredSquare; // Place the colored square in the new position
+            coloredSquare.position = next; // Update the colored square's position
 
-            // next iteration
+            // Move to the next position
             current = next;
             next = getNextPosition(current, move);
         }
 
-        // Remove  same-colored squares after movement
-        board.coloredSquaresByColor.get(coloredSquare.colorCode).removeAll(squaresToRemove);
-
+        // Now remove the squares that should actually be removed from the map (only if not the last square)
+        if (!squaresToRemove.isEmpty()) {
+            // Check if it's not the last square of the color before removing
+            for (ColoredSquare squareToRemove : squaresToRemove) {
+                List<ColoredSquare> sameColorSquares = board.coloredSquaresByColor.get(squareToRemove.colorCode);
+                // Only remove the square if there are more than 1 square of that color
+                if (sameColorSquares.size() > 1) {
+                    sameColorSquares.remove(squareToRemove); // Remove the square
+                }
+            }
+        }
+//
+//        System.out.println("After move:");
+//        board.displayBoard();
+//        System.out.println(board.coloredSquaresByColor);
     }
 
     public  void getAllPossibleMoves(Board board) {

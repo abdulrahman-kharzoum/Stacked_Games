@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Main extends JPanel implements KeyListener {
     Logic logic = new Logic();
@@ -36,35 +37,85 @@ public class Main extends JPanel implements KeyListener {
     }
 
     private void resetBoard() {
+        Scanner scanner = new Scanner(System.in);
         // User Input
-//
-//            if (!isrest) {
-//                board = logic.InitializeBoard().cloneBoard();
-//                clone = board.cloneBoard();
-//                isrest = true;
-//            } else {
-//                board = clone.cloneBoard();
-//                board.displayBoard();
-//                System.out.println();
-//            }
+        System.out.println("Enter the method:");
+        System.out.println("1. User Play");
+        System.out.println("2. Level1");
+        int i = scanner.nextInt();
+        switch (i){
+            case 1:
+            {
+                if (!isrest) {
+                    board = logic.InitializeBoard().cloneBoard();
+                    clone = board.cloneBoard();
+                    isrest = true;
+                } else {
+                    board = clone.cloneBoard();
+                    board.displayBoard();
+                    System.out.println();
+                }
+            break;
+            }
+            case 2:
+            {
+                level1 = Level.createLevel1();
+                board = level1.getBoard().cloneBoard();
+                break;
+            }
+        }
 
 
         // Static Level 8
-//
-//      level1 = Level.createLevel3();
-//      board = level1.getBoard().cloneBoard();
 
 
-        // Next States
-//       Node root = new Node(null, board);
-//       Solver solver = new Solver();
-//        Node solutionNode = solver.bfs(root);
-//
-//        if (solutionNode != null) {
-//            System.out.println("Solution found!");
-//        } else {
-//            System.out.println("No solution exists.");
-//        }
+        System.out.println("Enter number of the play");
+        System.out.println("1.DFS");
+        System.out.println("2.BFS");
+      int x ;
+
+      x =  scanner.nextInt();
+        Node root = new Node(null, board.cloneBoard());
+        Logic solver = new Logic();
+        switch (x){
+            case 1:
+            {
+                Node solutionNode = solver.dfs(root);
+
+                if (solutionNode != null) {
+                    System.out.println("Solution found!");
+                } else {
+                    System.out.println("No solution exists.");
+                }
+                break;
+            }
+            case 2:
+            {
+                Node solutionNode = solver.bfs(root);
+
+                if (solutionNode != null) {
+                    System.out.println("Solution found!");
+                } else {
+                    System.out.println("No solution exists.");
+                }
+                break;
+            }
+            case 3:
+            {
+                Node solutionNode = solver.dfs(root);
+
+                if (solutionNode != null) {
+                    System.out.println("Solution found!");
+                } else {
+                    System.out.println("No solution exists.");
+                }
+                break;
+            }
+            default:{
+
+            }
+        }
+
 
 
         repaint();

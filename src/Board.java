@@ -59,34 +59,24 @@ public class Board {
     }
 
     public Board cloneBoard() {
-        // Clone the coloredSquaresByColor map
-        Map<Integer, List<ColoredSquare>> clonedColoredSquaresByColor = new HashMap<>();
+        Map<Integer, List<ColoredSquare>> clonedMap = new HashMap<>();
         for (Map.Entry<Integer, List<ColoredSquare>> entry : this.coloredSquaresByColor.entrySet()) {
             List<ColoredSquare> clonedList = new ArrayList<>();
             for (ColoredSquare square : entry.getValue()) {
-                clonedList.add(square.clone()); // Assuming ColoredSquare has a clone method
+                clonedList.add(square.clone());
             }
-            clonedColoredSquaresByColor.put(entry.getKey(), clonedList);
+            clonedMap.put(entry.getKey(), clonedList);
         }
 
-        // Clone squares array
-        Square[][] clonedSquares = new Square[this.boardX][this.boardY];
-        for (int i = 0; i < this.boardX; i++) {
-            for (int j = 0; j < this.boardY; j++) {
-                clonedSquares[i][j] = this.squares[i][j].clone(); // Assuming Square and its subclasses have clone methods
-            }
-        }
-
-        // Create a new Board
-        return new Board(this.boardX, this.boardY, this.numOfColors, clonedColoredSquaresByColor, this.walls.clone());
+        return new Board(this.boardX, this.boardY, this.numOfColors, clonedMap, this.walls.clone());
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Board board = (Board) o;
 
-        // Compare each square on the board
         for (int i = 0; i < boardX; i++) {
             for (int j = 0; j < boardY; j++) {
                 if (!this.squares[i][j].equals(board.squares[i][j])) {
@@ -101,7 +91,6 @@ public class Board {
     public int hashCode() {
         int result = Objects.hash(boardX, boardY, numOfColors);
 
-        // Combine the hash of each square in the grid
         for (int i = 0; i < boardX; i++) {
             for (int j = 0; j < boardY; j++) {
                 result = 31 * result + squares[i][j].hashCode();
@@ -109,6 +98,7 @@ public class Board {
         }
         return result;
     }
+
 
 
 }
