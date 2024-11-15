@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 
 public class Main extends JPanel implements KeyListener {
     Logic logic = new Logic();
@@ -25,7 +26,7 @@ public class Main extends JPanel implements KeyListener {
         requestFocusInWindow();
 
         // Add reset button
-        JButton resetButton = new JButton("Reset");
+        JButton resetButton = new JButton("Restart Game");
         resetButton.addActionListener(e -> {
             resetBoard();
             requestFocusInWindow();  // Move focus back
@@ -94,65 +95,29 @@ public class Main extends JPanel implements KeyListener {
         System.out.println("2.DFS Using Recursion ");
         System.out.println("3.BFS");
         System.out.println("4.UCS");
-
-      int x ;
-
-      x =  scanner.nextInt();
+        int x = scanner.nextInt();
         Node root = new Node(null, board.cloneBoard());
         Logic solver = new Logic();
-        switch (x){
-            case 1:
-            {
-                Node solutionNode = solver.dfsUsingLoop(root);
 
-                if (solutionNode != null) {
-                    System.out.println("Solution found!");
-                } else {
-                    System.out.println("No solution exists.");
-                }
-                break;
-            }
-            case 2:
-            {
-                Node solutionNode = solver.bfs(root);
+        // Create a list of solver methods
+        List<Function<Node, Node>> solvers = Arrays.asList(
+                solver::dfsUsingLoop,
+                solver::bfs,
+                (node) -> solver.dfsUsingRecursion(node, new HashSet<>()),
+                solver::ucs
+        );
 
-                if (solutionNode != null) {
-                    System.out.println("Solution found!");
-                } else {
-                    System.out.println("No solution exists.");
-                }
-                break;
+        if (x >= 1 && x <= solvers.size()) {
+            Node solutionNode = solvers.get(x - 1).apply(root);
+            if (solutionNode != null) {
+                System.out.println("Solution found!");
+            } else {
+                System.out.println("No solution exists.");
             }
-            case 3:
-            {
-                Node solutionNode = solver.dfsUsingRecursion(root,new HashSet<Board>());
-
-                if (solutionNode != null) {
-                    System.out.println("Solution found!");
-                } else {
-                    System.out.println("No solution exists.");
-                }
-                break;
-            }
-            case 4:
-            {
-                Node solutionNode = solver.ucs(root);
-
-                if (solutionNode != null) {
-                    System.out.println("Solution found!");
-                } else {
-                    System.out.println("No solution exists.");
-                }
-                break;
-            }
-            default:{
-
-            }
+        } else {
+            System.out.println("Invalid choice.");
         }
-
-
-
-        repaint();
+      repaint();
 }
 
     @Override

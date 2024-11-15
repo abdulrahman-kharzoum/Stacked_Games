@@ -119,23 +119,22 @@ public class Structure {
                 // Same color: check if there's a conflict
                 List<ColoredSquare> sameColorSquares = board.coloredSquaresByColor.get(targetColoredSquare.colorCode);
 
-                // Ensure not removing the last square of a color
+               // Keep one square
                 if (sameColorSquares.size() > 1) {
-                    squaresToRemove.add(targetColoredSquare); // Only remove if there's more than one square of that color
+                    squaresToRemove.add(targetColoredSquare);
                 }
             }
 
             // Move the square to the new position
-            board.squares[current.x][current.y] = new EmptySquare(current); // Clear the old position
-            board.squares[next.x][next.y] = coloredSquare; // Place the colored square in the new position
-            coloredSquare.position = next; // Update the colored square's position
+            board.squares[current.x][current.y] = new EmptySquare(current);
+            board.squares[next.x][next.y] = coloredSquare;
+            coloredSquare.position = next;
 
             // Move to the next position
             current = next;
             next = getNextPosition(current, move);
         }
 
-        // Now remove the squares that should actually be removed from the map (only if not the last square)
         if (!squaresToRemove.isEmpty()) {
             // Check if it's not the last square of the color before removing
             for (ColoredSquare squareToRemove : squaresToRemove) {
@@ -147,7 +146,7 @@ public class Structure {
                 }
             }
         }
-//
+
 //        System.out.println("After move:");
 //        board.displayBoard();
 //        System.out.println(board.coloredSquaresByColor);
