@@ -12,6 +12,8 @@ public class Board {
     public Square[][] squares;
     public int numOfColors;
     public Map<Integer, List<ColoredSquare>> coloredSquaresByColor;
+
+    public List<ColoredSquare> coloredSquares;
     public Wall[] walls;
 
     private static final String RESET = "\033[0m";
@@ -23,6 +25,12 @@ public class Board {
         this.coloredSquaresByColor = coloredSquaresByColor;
         this.walls = walls;
         this.squares = new Square[x][y];
+
+        this.coloredSquares = new ArrayList<>();
+
+        for (List<ColoredSquare> coloredSquareList : coloredSquaresByColor.values()) {
+            this.coloredSquares.addAll(coloredSquareList);
+        }
         prepareBoard();
     }
     //Empty Spaces
@@ -97,6 +105,15 @@ public class Board {
             }
         }
         return result;
+
+//        List<Object> objectList = new ArrayList<>();
+//        for (int i = 0; i < boardY; i++) {
+//            for (Square s : squares[i]){
+//                objectList.add(s);
+//            }
+//
+//        }
+//        return Objects.hash(objectList);
     }
 
 

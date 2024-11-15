@@ -17,4 +17,9 @@ public class Wall extends Square {
     public SquareType getSquareType() {
         return SquareType.WALL;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
