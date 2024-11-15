@@ -52,7 +52,7 @@ public class ColoredSquare extends Square{
     public ColoredSquare clone() {
         return new ColoredSquare(this.position.clone(), this.type, this.color);
     }
-//
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,25 +65,7 @@ public class ColoredSquare extends Square{
 
     @Override
     public int hashCode() {
-//        System.out.println("colored square");
-//        System.out.println("type "+type+"position "+position);
-//        System.out.println("color "+color+"colorCode "+colorCode);
-//        System.out.println("hash: "+Objects.hash(type, position));
         return Objects.hash(super.hashCode(), color, colorCode);
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        ColoredSquare that = (ColoredSquare) o;
-        return colorCode == that.colorCode && Objects.equals(color, that.color);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), color, colorCode);
-    }
 }

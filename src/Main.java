@@ -3,10 +3,8 @@ import Model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 
 public class Main extends JPanel implements KeyListener {
     Logic logic = new Logic();
@@ -40,8 +38,11 @@ public class Main extends JPanel implements KeyListener {
         Scanner scanner = new Scanner(System.in);
         // User Input
         System.out.println("Enter the method:");
-        System.out.println("1. User Play");
+        System.out.println("1. User Input");
         System.out.println("2. Level1");
+        System.out.println("3. Level2");
+        System.out.println("4. Level3");
+        System.out.println("5. Level8");
         int i = scanner.nextInt();
         switch (i){
             case 1:
@@ -63,15 +64,37 @@ public class Main extends JPanel implements KeyListener {
                 board = level1.getBoard().cloneBoard();
                 break;
             }
+            case 3:
+            {
+                level1 = Level.createLevel2();
+                board = level1.getBoard().cloneBoard();
+                break;
+            }
+            case 4:
+            {
+                level1 = Level.createLevel3();
+                board = level1.getBoard().cloneBoard();
+                break;
+            }
+            case 5:
+            {
+                level1 = Level.createLevel8();
+                board = level1.getBoard().cloneBoard();
+                break;
+            }
+            default:{
+                break;
+            }
         }
 
 
-        // Static Level 8
 
+        System.out.println("Enter number of the Algorithm:");
+        System.out.println("1.DFS Using LOOPS");
+        System.out.println("2.DFS Using Recursion ");
+        System.out.println("3.BFS");
+        System.out.println("4.UCS");
 
-        System.out.println("Enter number of the play");
-        System.out.println("1.DFS");
-        System.out.println("2.BFS");
       int x ;
 
       x =  scanner.nextInt();
@@ -80,7 +103,7 @@ public class Main extends JPanel implements KeyListener {
         switch (x){
             case 1:
             {
-                Node solutionNode = solver.dfs(root);
+                Node solutionNode = solver.dfsUsingLoop(root);
 
                 if (solutionNode != null) {
                     System.out.println("Solution found!");
@@ -102,7 +125,7 @@ public class Main extends JPanel implements KeyListener {
             }
             case 3:
             {
-                Node solutionNode = solver.dfs(root);
+                Node solutionNode = solver.dfsUsingRecursion(root,new HashSet<Board>());
 
                 if (solutionNode != null) {
                     System.out.println("Solution found!");
@@ -173,6 +196,19 @@ public class Main extends JPanel implements KeyListener {
         frame.add(gamePanel);
         frame.setSize(700, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Get screen dimensions and set the frame to the right side
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = toolkit.getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        // Set the frame's location to the right side of the screen
+        int frameWidth = 700; // Width of the frame
+        int xPosition = screenWidth - frameWidth; // Position frame on the right side
+        int yPosition = (screenHeight - 800) / 2 - 20; // Vertically center the frame
+        frame.setLocation(xPosition, yPosition);
+
         frame.setVisible(true);
     }
 }

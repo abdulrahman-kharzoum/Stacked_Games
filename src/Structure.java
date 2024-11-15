@@ -68,31 +68,28 @@ public class Structure {
 
 
     public boolean checkGameFinished(Board board) {
-        // Check if each color only has one square remaining
+
         for (Map.Entry<Integer, List<ColoredSquare>> entry : board.coloredSquaresByColor.entrySet()) {
             List<ColoredSquare> coloredSquareList = entry.getValue();
 
-            // If no squares or more than one square of a color, the game is not finished
-            if (coloredSquareList == null || coloredSquareList.size() != 1) {
+           if (coloredSquareList == null || coloredSquareList.size() != 1) {
                 return false;
             }
         }
 
-        // Ensure that all expected colors are present
         if (board.coloredSquaresByColor.size() != board.numOfColors) {
             return false; // Missing colors
         }
 
-        return true; // Game finished if only one square per color and all colors are present
+        return true;
     }
 
     public boolean isFinalState(Node node) {
         Map<Integer, List<ColoredSquare>> map = node.board.coloredSquaresByColor;
 
-        // Check if exactly one square exists for each color
         for (Map.Entry<Integer, List<ColoredSquare>> entry : map.entrySet()) {
             if (entry.getValue().size() != 1) {
-                return false; // More than one or none of this color
+                return false;
             }
         }
         return true;
@@ -103,7 +100,7 @@ public class Structure {
         Position current = coloredSquare.position;
         Position next = getNextPosition(current, move);
 
-        List<ColoredSquare> squaresToRemove = new ArrayList<>(); // This will track squares that need to be removed
+        List<ColoredSquare> squaresToRemove = new ArrayList<>();
 
         while (!isOutOfBounds(next, board)) {
             Square targetSquare = board.squares[next.x][next.y];

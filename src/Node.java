@@ -13,7 +13,7 @@ public class Node {
         this.board = board;
     }
     public void PrintNode(){
-        System.out.println("move "+ action);
+        System.out.println("ACTION : "+ action);
         board.displayBoard();
     }
 
