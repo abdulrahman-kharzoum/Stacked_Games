@@ -28,18 +28,41 @@ public class Logic {
             Board clonedBoard = thisBoard.cloneBoard();
             int removedSquares = structure.applyMove(clonedBoard, move);
             if (removedSquares > 0) {
-                int newCost = node.cost - removedSquares;
+                int newCost = node.cost - removedSquares+10;
                 Node newNode = new Node(node, clonedBoard, newCost, move);
                 nextCostStates.add(newNode);
                 //        newNode.PrintNode();
                 //        System.out.println();
 
             }
+            else{
+                int newCost = node.cost + move.getCost();
+                Node newNode = new Node(node, clonedBoard, newCost, move);
+                nextCostStates.add(newNode);
+            }
         }
 
         return nextCostStates;
     }
+    public List<Node> generateNextAstarCostStates(Node node) {
+        List<Node> nextCostStates = new ArrayList<>();
+        var thisBoard = node.board;
+        for (Move move : Move.values()) {
+            Board clonedBoard = thisBoard.cloneBoard();
+            int removedSquares = structure.applyMove(clonedBoard, move);
 
+                int newCost = node.cost - removedSquares + node.board.getNumOfSquaresLeft() ;
+                Node newNode = new Node(node, clonedBoard, move,newCost ,node.board.getNumOfSquaresLeft()*10);
+                nextCostStates.add(newNode);
+                //        newNode.PrintNode();
+                //        System.out.println();
+
+
+
+        }
+
+        return nextCostStates;
+    }
     public Node bfs(Node root) {
         Queue<Node> queue = new LinkedList<>();
         Set<Board> visited = new HashSet<>();
@@ -80,6 +103,33 @@ public class Logic {
 
             // Generate all possible next states
             for (Node nextState : generateNextCostStates(node)) {
+                if (!visited.contains(nextState.board)) {
+                    priorityQueue.add(nextState);
+                    visited.add(nextState.board);
+                }
+            }
+        }
+
+        return null; // No solution found
+    }
+
+    public Node AStar(Node root) {
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Node::getAstarCost));
+        Set<Board> visited = new HashSet<>();
+        root.cost= 0;
+        root.heuristic = root.board.getNumOfSquaresLeft() * 10;
+        priorityQueue.add(root);
+        visited.add(root.board);
+
+        while (!priorityQueue.isEmpty()) {
+            Node node = priorityQueue.poll();
+            node.PrintNode();
+
+
+            if (FinalState(visited, node)) return node; // Solution found
+
+            // Generate all possible next states
+            for (Node nextState : generateNextAstarCostStates(node)) {
                 if (!visited.contains(nextState.board)) {
                     priorityQueue.add(nextState);
                     visited.add(nextState.board);

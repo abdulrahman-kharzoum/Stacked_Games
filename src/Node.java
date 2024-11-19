@@ -8,6 +8,7 @@ public class Node {
     Board board;
     Move action;
     int cost;
+    int heuristic;
 
     public Node(Node parent, Board board) {
         this.parent = parent;
@@ -19,8 +20,16 @@ public class Node {
         this.cost= cost;
         this.action = action;
     }
+    public Node(Node parent, Board board,Move action,int cost, int heuristic) {
+        this.parent = parent;
+        this.board = board;
+        this.action = action;
+        this.cost= cost;
+        this.heuristic= heuristic;
+    }
     public void PrintNode(){
         System.out.println("ACTION : "+ action);
+        System.out.println("Cost : "+ cost);
         board.displayBoard();
     }
 
@@ -41,21 +50,20 @@ public class Node {
     public int getCost() {
         return cost;
     }
-
+    public int getAstarCost() {
+        return cost + heuristic;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        return cost == node.cost &&
-                Objects.equals(parent, node.parent) &&
-                Objects.equals(board, node.board) &&
-                action == node.action;
+        return cost == node.cost && heuristic == node.heuristic && Objects.equals(parent, node.parent) && Objects.equals(board, node.board) && action == node.action;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(parent, board, action, cost);
+        return Objects.hash(parent, board, action, cost, heuristic);
     }
 }

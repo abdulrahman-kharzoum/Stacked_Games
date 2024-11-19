@@ -4,7 +4,9 @@ import Model.Position;
 import Model.Square;
 import Model.Wall;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Board {
     public final int boardX;
@@ -78,6 +80,34 @@ public class Board {
 
         return new Board(this.boardX, this.boardY, this.numOfColors, clonedMap, this.walls.clone());
     }
+
+    public int getNumOfSquaresLeft(){
+        int count = 0;
+        for (int i = 0; i < boardX; i++) {
+            for (Square square : squares[i]) {
+                if (square instanceof ColoredSquare) {
+                    count++;
+                }
+            }
+
+        }
+        return count;
+    }
+    public int getNumOfSquaresLeftWithSameColor(int colorCode){
+        int count = 0;
+        for (int i = 0; i < boardX; i++) {
+            for (Square square : squares[i]) {
+                if (square instanceof ColoredSquare) {
+                    if (((ColoredSquare) square).colorCode == colorCode) {
+                        count++;
+                    }
+                }
+            }
+
+        }
+        return count;
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -95,16 +95,17 @@ public class Main extends JPanel implements KeyListener {
         System.out.println("2.DFS Using Recursion ");
         System.out.println("3.BFS");
         System.out.println("4.UCS");
+        System.out.println("5.A Star");
         int x = scanner.nextInt();
         Node root = new Node(null, board.cloneBoard());
         Logic solver = new Logic();
 
-        // Create a list of solver methods
-        List<Function<Node, Node>> solvers = Arrays.asList(
+       List<Function<Node, Node>> solvers = Arrays.asList(
                 solver::dfsUsingLoop,
                 solver::bfs,
                 (node) -> solver.dfsUsingRecursion(node, new HashSet<>()),
-                solver::ucs
+                solver::ucs,
+                solver::AStar
         );
 
         if (x >= 1 && x <= solvers.size()) {
