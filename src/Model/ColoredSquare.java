@@ -14,6 +14,16 @@ public class ColoredSquare extends Square{
     }
 
     @Override
+    public String toString() {
+        return "ColoredSquare{" +
+                "color='" + color + '\'' +
+                ", colorCode=" + colorCode +
+                ", type='" + type + '\'' +
+                ", position=" + position +
+                '}';
+    }
+
+    @Override
     public SquareType getSquareType() {
         return SquareType.COLORED;
     }

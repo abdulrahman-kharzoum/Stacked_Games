@@ -28,14 +28,13 @@ public class Logic {
             Board clonedBoard = thisBoard.cloneBoard();
             int removedSquares = structure.applyMove(clonedBoard, move);
             if (removedSquares > 0) {
-                int newCost = node.cost - removedSquares+10;
+                int newCost = node.cost - removedSquares + 10;
                 Node newNode = new Node(node, clonedBoard, newCost, move);
                 nextCostStates.add(newNode);
                 //        newNode.PrintNode();
                 //        System.out.println();
 
-            }
-            else{
+            } else {
                 int newCost = node.cost + move.getCost();
                 Node newNode = new Node(node, clonedBoard, newCost, move);
                 nextCostStates.add(newNode);
@@ -47,22 +46,22 @@ public class Logic {
     public List<Node> generateNextAstarCostStates(Node node) {
         List<Node> nextCostStates = new ArrayList<>();
         var thisBoard = node.board;
+
         for (Move move : Move.values()) {
             Board clonedBoard = thisBoard.cloneBoard();
             int removedSquares = structure.applyMove(clonedBoard, move);
 
-                int newCost = node.cost - removedSquares + node.board.getNumOfSquaresLeft() ;
-                Node newNode = new Node(node, clonedBoard, move,newCost ,node.board.getNumOfSquaresLeft()*10);
+
+                int g = node.cost + 1 - removedSquares; // Increment cost for the move
+                int h = clonedBoard.getHeuristic(); // Calculate updated heuristic
+                Node newNode = new Node(node, clonedBoard, move, g, h);
                 nextCostStates.add(newNode);
-                //        newNode.PrintNode();
-                //        System.out.println();
-
-
 
         }
-
         return nextCostStates;
     }
+
+
     public Node bfs(Node root) {
         Queue<Node> queue = new LinkedList<>();
         Set<Board> visited = new HashSet<>();
@@ -116,7 +115,7 @@ public class Logic {
     public Node AStar(Node root) {
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Node::getAstarCost));
         Set<Board> visited = new HashSet<>();
-        root.cost= 0;
+        root.cost = 0;
         root.heuristic = root.board.getNumOfSquaresLeft() * 10;
         priorityQueue.add(root);
         visited.add(root.board);
@@ -290,4 +289,7 @@ public class Logic {
                 return ConsoleColors.WHITE;
         }
     }
+
+
+
 }

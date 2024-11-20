@@ -4,7 +4,6 @@ import Model.Position;
 import Model.Square;
 import Model.Wall;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -73,13 +72,15 @@ public class Board {
         for (Map.Entry<Integer, List<ColoredSquare>> entry : this.coloredSquaresByColor.entrySet()) {
             List<ColoredSquare> clonedList = new ArrayList<>();
             for (ColoredSquare square : entry.getValue()) {
-                clonedList.add(square.clone());
+                clonedList.add(square.clone()); // Ensure a deep clone of each square
             }
             clonedMap.put(entry.getKey(), clonedList);
         }
 
-        return new Board(this.boardX, this.boardY, this.numOfColors, clonedMap, this.walls.clone());
+        Wall[] clonedWalls = Arrays.copyOf(this.walls, this.walls.length);
+        return new Board(this.boardX, this.boardY, this.numOfColors, clonedMap, clonedWalls);
     }
+
 
     public int getNumOfSquaresLeft(){
         int count = 0;
@@ -145,7 +146,84 @@ public class Board {
 //        }
 //        return Objects.hash(objectList);
     }
+    public int getHeuristic() {
+        int remainingSquares = this.getNumOfSquaresLeft();
+        int manhattanDistance = calculateManhattanDistance(this);
+        int clusterPenalty = calculateMaxDistanceBetweenSameColorSquares(this);
 
+        int heuristic = remainingSquares * 10 + manhattanDistance * 2  ;
+
+
+        return heuristic;
+    }
+
+
+    private Position findNearestTarget(Board board, ColoredSquare square) {
+        Position nearest = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        for (int i = 0; i < board.boardX; i++) {
+            for (int j = 0; j < board.boardY; j++) {
+                Square targetSquare = board.squares[i][j];
+                if (targetSquare instanceof ColoredSquare target && target.colorCode == square.colorCode) {
+                    int distance = Math.abs(square.position.x - i) + Math.abs(square.position.y - j);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        nearest = new Position(i, j);
+                    }
+                }
+            }
+        }
+
+
+        return nearest != null ? nearest : square.position;
+    }
+
+    private int calculateManhattanDistance(Board board) {
+        int totalDistance = 0;
+
+        for (int i = 0; i < board.boardX; i++) {
+            for (int j = 0; j < board.boardY; j++) {
+                if (board.squares[i][j] instanceof ColoredSquare square) {
+                    Position goalPosition = findNearestTarget(board, square);
+                    if (goalPosition != null) {
+                        int distance = Math.abs(square.position.x - goalPosition.x) +
+                                Math.abs(square.position.y - goalPosition.y);
+                        totalDistance += distance;
+
+                    }
+                }
+            }
+        }
+
+
+        return totalDistance;
+    }
+
+    private int calculateMaxDistanceBetweenSameColorSquares(Board board) {
+        int penalty = 0;
+
+        for (List<ColoredSquare> coloredSquares : board.coloredSquaresByColor.values()) {
+            int maxDistance = calculateFarthestDistance(coloredSquares);
+
+            penalty += maxDistance;
+        }
+
+
+        return penalty;
+    }
+
+    private int calculateFarthestDistance(List<ColoredSquare> coloredSquares) {
+        int maxDistance = 0;
+
+        for (ColoredSquare p1 : coloredSquares) {
+            for (ColoredSquare p2 : coloredSquares) {
+                int distance = Math.abs(p1.position.x - p2.position.x) + Math.abs(p1.position.y - p2.position.y);
+                maxDistance = Math.max(maxDistance, distance);
+            }
+        }
+        return maxDistance;
+    }
 
 
 }
