@@ -53,6 +53,9 @@ public class Node {
     public int getAstarCost() {
         return cost + heuristic;
     }
+    public int getHeuristic() {
+        return heuristic;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -63,6 +63,8 @@ public class Structure {
             }
 
         } while (anySquareMoved);
+
+        Move.movesCount++;
         return removedSquares;
     }
 
@@ -143,7 +145,7 @@ public class Structure {
                 if (sameColorSquares.size() > 1) {
                     sameColorSquares.remove(squareToRemove); // Remove the square
                     removedSquares++;
-                    System.out.println("Removed Squares per Move: "+removedSquares);
+//                    System.out.println("Removed Squares per Move: "+removedSquares);
                 }
             }
         }

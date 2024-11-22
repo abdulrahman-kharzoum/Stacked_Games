@@ -96,6 +96,7 @@ public class Main extends JPanel implements KeyListener {
         System.out.println("3.BFS");
         System.out.println("4.UCS");
         System.out.println("5.A Star");
+        System.out.println("6.Hill Climbing");
         int x = scanner.nextInt();
         Node root = new Node(null, board.cloneBoard());
         Logic solver = new Logic();
@@ -105,13 +106,15 @@ public class Main extends JPanel implements KeyListener {
                 solver::bfs,
                 (node) -> solver.dfsUsingRecursion(node, new HashSet<>()),
                 solver::ucs,
-                solver::AStar
+                solver::AStar,
+                solver::hillClimbing
         );
 
         if (x >= 1 && x <= solvers.size()) {
             Node solutionNode = solvers.get(x - 1).apply(root);
             if (solutionNode != null) {
                 System.out.println("Solution found!");
+                System.out.println("Moves Count: "+Move.movesCount);
             } else {
                 System.out.println("No solution exists.");
             }

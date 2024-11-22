@@ -43,6 +43,32 @@ public class Logic {
 
         return nextCostStates;
     }
+
+    public List<Node> generateNextHeuristicStates(Node node) {
+        List<Node> nextHeuristicStates = new ArrayList<>();
+        var thisBoard = node.board;
+        for (Move move : Move.values()) {
+            Board clonedBoard = thisBoard.cloneBoard();
+            int removedSquares = structure.applyMove(clonedBoard, move);
+            if (removedSquares > 0) {
+                int newHeuristic = clonedBoard.getHeuristic(move);
+                Node newNode = new Node(node, clonedBoard, move, 0, newHeuristic);
+                System.out.println("heuristic : " + newHeuristic);
+                nextHeuristicStates.add(newNode);
+            } else {
+                int newHeuristic = clonedBoard.getHeuristic(move) + move.getCost();
+                Node newNode = new Node(node, clonedBoard, move, 0, newHeuristic);
+                System.out.println("heuristic : " + newHeuristic);
+                nextHeuristicStates.add(newNode);
+            }
+
+            //        newNode.PrintNode();
+            //        System.out.println();
+        }
+
+        return nextHeuristicStates;
+    }
+
     public List<Node> generateNextAstarCostStates(Node node) {
         List<Node> nextCostStates = new ArrayList<>();
         var thisBoard = node.board;
@@ -50,17 +76,25 @@ public class Logic {
         for (Move move : Move.values()) {
             Board clonedBoard = thisBoard.cloneBoard();
             int removedSquares = structure.applyMove(clonedBoard, move);
+            if (removedSquares > 0) {
+                int g = node.cost + 1 - removedSquares;
+                int h = clonedBoard.getHeuristic(move);
+                System.out.println("heuristic : " + h);
 
-
-                int g = node.cost + 1 - removedSquares; // Increment cost for the move
-                int h = clonedBoard.getHeuristic(); // Calculate updated heuristic
                 Node newNode = new Node(node, clonedBoard, move, g, h);
                 nextCostStates.add(newNode);
+            } else {
+                int g = node.cost + 1 + move.getCost();
+                int h = clonedBoard.getHeuristic(move);
+                System.out.println("heuristic : " + h);
+
+                Node newNode = new Node(node, clonedBoard, move, g, h);
+                nextCostStates.add(newNode);
+            }
 
         }
         return nextCostStates;
     }
-
 
     public Node bfs(Node root) {
         Queue<Node> queue = new LinkedList<>();
@@ -100,8 +134,36 @@ public class Logic {
 
             if (FinalState(visited, node)) return node; // Solution found
 
-            // Generate all possible next states
             for (Node nextState : generateNextCostStates(node)) {
+                if (!visited.contains(nextState.board)) {
+                    priorityQueue.add(nextState);
+                    visited.add(nextState.board);
+                }
+            }
+        }
+
+        return null; // No solution found
+    }
+
+
+    public Node hillClimbing(Node root) {
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Node::getHeuristic));
+        Set<Board> visited = new HashSet<>();
+        root.cost = 0;
+//        root.heuristic = root.board.getNumOfSquaresLeft() * 10;
+        root.heuristic = root.getHeuristic();
+        priorityQueue.add(root);
+        visited.add(root.board);
+
+        while (!priorityQueue.isEmpty()) {
+            Node node = priorityQueue.poll();
+            node.PrintNode();
+
+
+            if (FinalState(visited, node)) return node; // Solution found
+
+
+            for (Node nextState : generateNextHeuristicStates(node)) {
                 if (!visited.contains(nextState.board)) {
                     priorityQueue.add(nextState);
                     visited.add(nextState.board);
@@ -116,7 +178,8 @@ public class Logic {
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Node::getAstarCost));
         Set<Board> visited = new HashSet<>();
         root.cost = 0;
-        root.heuristic = root.board.getNumOfSquaresLeft() * 10;
+//        root.heuristic = root.board.getNumOfSquaresLeft() * 10;
+        root.heuristic = root.getHeuristic();
         priorityQueue.add(root);
         visited.add(root.board);
 
@@ -127,7 +190,7 @@ public class Logic {
 
             if (FinalState(visited, node)) return node; // Solution found
 
-            // Generate all possible next states
+
             for (Node nextState : generateNextAstarCostStates(node)) {
                 if (!visited.contains(nextState.board)) {
                     priorityQueue.add(nextState);
@@ -289,7 +352,6 @@ public class Logic {
                 return ConsoleColors.WHITE;
         }
     }
-
 
 
 }

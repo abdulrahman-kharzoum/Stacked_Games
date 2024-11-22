@@ -6,7 +6,7 @@ public enum Move {
     private int moveX;
     private int moveY;
     private int cost;
-
+    public static int movesCount = 0;
     Move(int moveX, int moveY, int cost) {
         this.moveX = moveX;
         this.moveY = moveY;
