@@ -97,6 +97,8 @@ public class Logic {
     }
 
     public Node bfs(Node root) {
+        long startTime = System.nanoTime();
+
         Queue<Node> queue = new LinkedList<>();
         Set<Board> visited = new HashSet<>();
         queue.add(root);
@@ -107,8 +109,11 @@ public class Logic {
             node.PrintNode();
 
 
-            if (FinalState(visited, node)) return node; // Solution found
-
+            if (FinalState(visited, node)) {
+                long endTime = System.nanoTime();
+                System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
+                return node; // Solution found
+            }
             // Generate all possible next states
             for (Node nextState : generateNextStates(node)) {
                 if (!visited.contains(nextState.board)) {
@@ -117,11 +122,15 @@ public class Logic {
                 }
             }
         }
+        long endTime = System.nanoTime();
+        System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
 
         return null; // No solution found
     }
 
     public Node ucs(Node root) {
+        long startTime = System.nanoTime();
+
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Node::getCost));
         Set<Board> visited = new HashSet<>();
         priorityQueue.add(root);
@@ -132,8 +141,11 @@ public class Logic {
             node.PrintNode();
 
 
-            if (FinalState(visited, node)) return node; // Solution found
-
+            if (FinalState(visited, node)) {
+                long endTime = System.nanoTime();
+                System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
+                return node; // Solution found
+            }
             for (Node nextState : generateNextCostStates(node)) {
                 if (!visited.contains(nextState.board)) {
                     priorityQueue.add(nextState);
@@ -141,12 +153,16 @@ public class Logic {
                 }
             }
         }
+        long endTime = System.nanoTime();
+        System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
 
         return null; // No solution found
     }
 
 
     public Node hillClimbing(Node root) {
+        long startTime = System.nanoTime();
+
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Node::getHeuristic));
         Set<Board> visited = new HashSet<>();
         root.cost = 0;
@@ -160,8 +176,11 @@ public class Logic {
             node.PrintNode();
 
 
-            if (FinalState(visited, node)) return node; // Solution found
-
+            if (FinalState(visited, node)) {
+                long endTime = System.nanoTime();
+                System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
+                return node; // Solution found
+            }
 
             for (Node nextState : generateNextHeuristicStates(node)) {
                 if (!visited.contains(nextState.board)) {
@@ -170,11 +189,16 @@ public class Logic {
                 }
             }
         }
+        long endTime = System.nanoTime();
+        System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
+
 
         return null; // No solution found
     }
 
     public Node AStar(Node root) {
+        long startTime = System.nanoTime();
+
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Node::getAstarCost));
         Set<Board> visited = new HashSet<>();
         root.cost = 0;
@@ -187,9 +211,11 @@ public class Logic {
             Node node = priorityQueue.poll();
             node.PrintNode();
 
-
-            if (FinalState(visited, node)) return node; // Solution found
-
+            if (FinalState(visited, node)) {
+                long endTime = System.nanoTime();
+                System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
+                return node; // Solution found
+            }
 
             for (Node nextState : generateNextAstarCostStates(node)) {
                 if (!visited.contains(nextState.board)) {
@@ -198,14 +224,17 @@ public class Logic {
                 }
             }
         }
+        long endTime = System.nanoTime();
+        System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
 
-        return null; // No solution found
+        return null;
     }
 
     private boolean FinalState(Set<Board> visited, Node node) {
         if (structure.isFinalState(node)) {
             System.out.println("Visited nodes: " + visited.size());
             List<Move> pathToSolution = node.getPath();
+            System.out.println("Nodes Path Count: " + pathToSolution.size());
             System.out.println("Solution found! Path to solution:");
             for (Move move : pathToSolution) {
                 System.out.println(move);
@@ -216,6 +245,7 @@ public class Logic {
     }
 
     public Node dfsUsingLoop(Node root) {
+        long startTime = System.nanoTime();
         Stack<Node> stack = new Stack<>();
         Set<Board> visited = new HashSet<>();
         stack.push(root);
@@ -225,7 +255,11 @@ public class Logic {
             Node node = stack.pop();
             node.PrintNode();
 
-            if (FinalState(visited, node)) return node; // Solution found
+            if (FinalState(visited, node)) {
+                long endTime = System.nanoTime();
+                System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
+                return node; // Solution found
+            }
 
 
             for (Node nextState : generateNextStates(node)) {
@@ -235,16 +269,23 @@ public class Logic {
                 }
             }
         }
+        long endTime = System.nanoTime();
+        System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
 
         return null;
     }
 
     public Node dfsUsingRecursion(Node node, Set<Board> visited) {
+        long startTime = System.nanoTime();
         if (node == null) return null;
 
         node.PrintNode();
 
-        if (FinalState(visited, node)) return node;
+        if (FinalState(visited, node)) {
+            long endTime = System.nanoTime();
+            System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
+            return node; // Solution found
+        }
 
         visited.add(node.board);
 
@@ -254,6 +295,8 @@ public class Logic {
                 if (result != null) return result;
             }
         }
+        long endTime = System.nanoTime();
+        System.out.println("Execution time: " + (endTime - startTime) / 1_000_000 + " ms");
 
         return null;
     }

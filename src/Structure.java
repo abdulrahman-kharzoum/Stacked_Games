@@ -44,17 +44,22 @@ public class Structure {
         do {
             anySquareMoved = false;
 
-            for (int i = 0; i < board.boardX; i++) {
-                for (int j = 0; j < board.boardY; j++) {
-                    if (board.squares[i][j] instanceof ColoredSquare square) {
-                        if (canMove(board, square, move)) {
-                           removedSquares=  applyMoveOneSquare(board, square, move,removedSquares);
-                            anySquareMoved = true;
-                        }
-                    }
+//            for (int i = 0; i < board.boardX; i++) {
+//                for (int j = 0; j < board.boardY; j++) {
+//                    if (board.squares[i][j] instanceof ColoredSquare square) {
+//                        if (canMove(board, square, move)) {
+//                           removedSquares=  applyMoveOneSquare(board, square, move,removedSquares);
+//                            anySquareMoved = true;
+//                        }
+//                    }
+//                }
+//            }
+            for (ColoredSquare coloredSquare: board.coloredSquares){
+                if (canMove(board, coloredSquare, move)) {
+                    removedSquares = applyMoveOneSquare(board, coloredSquare, move, removedSquares);
+                    anySquareMoved = true;
                 }
             }
-
 
             if (checkGameFinished(board)) {
                 System.out.println("Game Finished");
